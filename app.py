@@ -10,6 +10,41 @@ def index():
  return redirect(url_for('stock_profile', tick='AAPL'))
 
 
+@app.route('/<tick>/dcf_v2')
+def stock_profile_v2(tick):
+	if (len(tick) > 5):
+		tick ="AAPL"
+
+	cashflows = get_current_cashflow(tick, year_range)
+	growth_rates, avg_growth_rate = get_growth_rates(cashflows)
+	future_cashflows = get_future_cashflows(cashflows, years_holding, avg_growth_rate)
+	future_cashflows = get_terminal_value(future_cashflows, perpetual_growth_rate, dicount_rate)
+	PV_of_FFCFs, sum_of_FCFs = get_PV_of_FFCFs(future_cashflows, dicount_rate)
+	equity_value, price_per_share = get_equity_and_intrinsic(sum_of_FCFs, cash_and_eq, total_debt, shares_outstanding)
+
+	values = {
+		"ticker": tick,
+		"name": name,
+		"cashflows": cashflows,
+		"growth_rates": growth_rates,
+		"avg_growth_rate": avg_growth_rate,
+		"future_cashflows": future_cashflows,
+		"PV_of_FFCFs": PV_of_FFCFs,
+		"sum_of_FCFs": sum_of_FCFs,
+		"cash_and_eq": cash_and_eq,
+		"total_debt" : total_debt,
+		"shares_outstanding": shares_outstanding,
+		"equity_value" : equity_value,
+		"price_per_share": price_per_share,
+		"current_price_per_share": current_price,
+		"chart_dates": chart_dates,
+		"chart_values":chart_values
+
+	}
+	return render_template('index.html', val=values)
+
+
+
 @app.route('/<tick>')
 def stock_profile(tick):
 	if (len(tick) > 5):
