@@ -6,19 +6,13 @@ from datetime import date
 import yfinance as yf
 
 
-def get_by_tick(tick):
-    df = pd.read_csv("companies.csv")
-    row = df[(df == tick).any(axis=1)]
-    return row.values[0]
-
-
 def get_page_content(link):
     page = requests.get(link, headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0'})
     content = soup(page.content, "html.parser")
     return content
 
 
-def get_current_cashflow(ticker, last_year=3000):
+def get_current_cashflow(ticker, last_year = 3000):
     URL = f"https://www.macrotrends.net/stocks/charts/{ticker}/whatever/free-cash-flow"
     page = get_page_content(URL)
     cashflows = {}
