@@ -7,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup as soup
 
 current_year = datetime.datetime.now().year
+current_month = datetime.datetime.now().month
 years_forward = 4
 
 
@@ -116,23 +117,39 @@ def get_income_statement_ahead(net_income_margins, median_growth, median_FFCE, F
 	return income_statement_numbers
 
 
-def get_WACC(f, b, i):
+def scrap_Rf():
+	if (os.path.isfile('./TNX.txt')):
+		with open("./TNX.txt", "r") as f:
+			file_date = f.readline().strip()
+			Rf = float(f.readline().strip())
+			if file_date == f"{current_month}/{current_year}":
+				return Rf
+
 	page = requests.get("https://finance.yahoo.com/bonds")
 	content = soup(page.content, "html.parser")
+	Rf = float(content.find("fin-streamer", {"data-symbol":"^TNX"}).text)
+	if Rf:
+		with open("./TNX.txt", "w") as f:
+			f.write(f"{current_month}/{current_year}\n{Rf}")
+	else: 
+		Rf = 3
+	return Rf
 
-	print("content")
 
+def get_WACC(f, b, i):
 	t = f[current_year-1].loc["Income Tax Expense"]/f[current_year-1].loc["Income Before Tax"]
 	t = round(t, 4)
 
 	rd = (round(abs(f[current_year-1].loc["Interest Expense"])*100 / 
 			 (b[current_year-1].loc["Short Long Term Debt"]+b[current_year-1].loc["Long Term Debt"]),2))
 
-	Rf = float(content.find("fin-streamer", {"data-symbol":"^TNX"}).text)
+	Rf = scrap_Rf()
 
-	B = i["beta"]
+	B = i["beta"] if i["beta"] else 0.8
 
 	Rm = 10
+
+	print(t, rd, Rf, B)
 
 	Ra = Rf + B*(Rm - Rf)
 	re = Ra
@@ -148,8 +165,6 @@ def get_WACC(f, b, i):
 	return r
 
 def get_terminal_value(i, income_statement_numbers, r):
-	shares_outstanding = i["sharesOutstanding"]
-
 	perpetual_growth = 2.5
 	g = perpetual_growth / 100
 
@@ -176,9 +191,9 @@ def get_discount_factors(income_statement_numbers, r):
 	discount_factors.loc["PV of Future Cash Flow"] = discount_val
 	return discount_factors
 
-
-def get_intrinsic_value(terminal_value, discount_facs, shares_outstanding, margin_of_safety = 0.2):
-	PV_of_terminal_value = round(terminal_value * discount_facs[-1])
+def get_intrinsic_value(i, terminal_value, discount_facs, margin_of_safety = 0.2):
+	shares_outstanding = i["sharesOutstanding"]
+	PV_of_terminal_value = round(terminal_value * discount_factors[current_year+years_forward-1].loc["Discount Factor"])
 	todays_value = round(discount_factors.loc["PV of Future Cash Flow"].sum() + PV_of_terminal_value)
 	
 	fair_value_of_equity = todays_value/shares_outstanding

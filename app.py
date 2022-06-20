@@ -27,7 +27,7 @@ def dicounted_cashflow_2(tick):
 	r = get_WACC(f, b, i)
 	terminal_value, g = get_terminal_value(i, income_statement_numbers, r)
 	discount_factors = get_discount_factors(income_statement_numbers, r)
-	intrinsic_value = get_intrinsic_value(terminal_value, discount_factors, shares_outstanding, margin_of_safety = 0.2)
+	intrinsic_value = get_intrinsic_value(i, terminal_value, discount_factors, margin_of_safety = 0.2)
 
 	values = {
 		"ticker": tick,
