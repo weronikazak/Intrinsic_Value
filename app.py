@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template, url_for, redirect, Response, request
 from utils import *
-from dcf2 import *
+import dcf2
 import yfinance as yf
 
 app = Flask(__name__)
@@ -16,29 +16,30 @@ def dicounted_cashflow_2(tick):
 	if (len(tick) > 5):
 		tick ="AAPL"
 
-	i, b, c, f, a, h = get_details(tick)
-	name = get_name(i)
-	current_price = get_current_price(i)
-	FCF = get_free_cashflow(c)
-	median_FFCE, net_income = get_net_income(c, FCF)
-	median_growth, total_revenue = get_total_revenue(f, a)
-	free_cashflow_rate_median, net_income_margins = get_net_income_margins(total_revenue, net_income)
-	income_statement_numbers = get_income_statement_ahead(net_income_margins, median_growth, median_FFCE, FCF, free_cashflow_rate_median)
-	r = get_WACC(f, b, i)
-	terminal_value, g = get_terminal_value(i, income_statement_numbers, r)
-	discount_factors = get_discount_factors(income_statement_numbers, r)
-	intrinsic_value = get_intrinsic_value(i, terminal_value, discount_factors, margin_of_safety = 0.2)
+	i, b, c, f, a, h = dcf2.get_details(tick)
+	name = dcf2.get_name(i)
+	chart_dates, chart_values = dcf2.get_chart(h)
+	current_price = dcf2.get_current_price(i)
+	FCF = dcf2.get_free_cashflow(c)
+	median_FFCE, net_income = dcf2.get_net_income(c, FCF)
+	median_growth, total_revenue = dcf2.get_total_revenue(f, a)
+	free_cashflow_rate_median, net_income_margins = dcf2.get_net_income_margins(total_revenue, net_income)
+	income_statement_numbers = dcf2.get_income_statement_ahead(net_income_margins, median_growth, median_FFCE, FCF, free_cashflow_rate_median)
+	r = dcf2.get_WACC(f, b, i)
+	terminal_value, g = dcf2.get_terminal_value(i, income_statement_numbers, r)
+	discount_factors = dcf2.get_discount_factors(income_statement_numbers, r)
+	intrinsic_value = dcf2.get_intrinsic_value(i, terminal_value, discount_factors, margin_of_safety = 0.2)
 
 	values = {
 		"ticker": tick,
 		"name": name,
 		"cashflows": FCF,
 		"growth_rates": net_income,
-		"avg_growth_rate": median_FFCE,
+		# "avg_growth_rate": median_FFCE,
 		"future_cashflows": net_income_margins,
 		"PV_of_FFCFs": discount_factors,
-		"sum_of_FCFs": sum_of_FCFs,
-		"equity_value" : equity_value,
+		# "sum_of_FCFs": sum_of_FCFs,
+		# "equity_value" : equity_value,
 		"price_per_share": intrinsic_value,
 		"current_price_per_share": current_price,
 		"chart_dates": chart_dates,

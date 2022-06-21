@@ -87,6 +87,7 @@ def get_total_revenue(f, a):
 
 	return median_growth, total_revenue
 
+
 def get_net_income_margins(total_revenue, net_income):
 	net_income_margins = pd.concat([total_revenue.loc["Total Revenue"].to_frame().T, net_income.loc["Net Income"].to_frame().T])
 	
@@ -164,6 +165,7 @@ def get_WACC(f, b, i):
 
 	return r
 
+
 def get_terminal_value(i, income_statement_numbers, r):
 	perpetual_growth = 2.5
 	g = perpetual_growth / 100
@@ -191,7 +193,8 @@ def get_discount_factors(income_statement_numbers, r):
 	discount_factors.loc["PV of Future Cash Flow"] = discount_val
 	return discount_factors
 
-def get_intrinsic_value(i, terminal_value, discount_facs, margin_of_safety = 0.2):
+
+def get_intrinsic_value(i, terminal_value, discount_factors, margin_of_safety = 0.2):
 	shares_outstanding = i["sharesOutstanding"]
 	PV_of_terminal_value = round(terminal_value * discount_factors[current_year+years_forward-1].loc["Discount Factor"])
 	todays_value = round(discount_factors.loc["PV of Future Cash Flow"].sum() + PV_of_terminal_value)
