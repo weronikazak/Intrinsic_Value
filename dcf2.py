@@ -4,8 +4,10 @@ import os
 import yfinance as yf
 import datetime
 import requests
+import pickle
 from bs4 import BeautifulSoup as soup
 
+current_day = datetime.datetime.now().day
 current_year = datetime.datetime.now().year
 current_month = datetime.datetime.now().month
 years_forward = 4
@@ -29,25 +31,67 @@ def get_chart(h):
 
 
 def get_details(tick):
-	i = yf.Ticker(tick).info
+    path = f"stocks//{tick}//{int(current_day/5)*5}.{current_month}.{current_year}//"
+    if not os.path.exists(path):
+        os.makedirs(path)
+        
+        info = yf.Ticker(tick).info
 
-	b = yf.Ticker(tick).balance_sheet
-	b = b[b.columns[::-1]]
-	b.columns = pd.DatetimeIndex(b.columns).year
+        balance_sheet = yf.Ticker(tick).balance_sheet
+        balance_sheet = balance_sheet[balance_sheet.columns[::-1]]
+        balance_sheet.columns = pd.DatetimeIndex(balance_sheet.columns).year
 
-	c = yf.Ticker(tick).cashflow
-	c = c[c.columns[::-1]]
-	c.columns = pd.DatetimeIndex(c.columns).year
+        cashflow = yf.Ticker(tick).cashflow
+        cashflow = cashflow[cashflow.columns[::-1]]
+        cashflow.columns = pd.DatetimeIndex(cashflow.columns).year
 
-	f = yf.Ticker(tick).financials
-	f = f[f.columns[::-1]]
-	f.columns = pd.DatetimeIndex(f.columns).year
+        financials = yf.Ticker(tick).financials
+        financials = financials[financials.columns[::-1]]
+        financials.columns = pd.DatetimeIndex(financials.columns).year
 
-	a = yf.Ticker(tick).analysis
+        analysis = yf.Ticker(tick).analysis
 
-	h = yf.Ticker(tick).history(period="5y")
+        history = yf.Ticker(tick).history(period="5y")
+        
+        with open(path + 'info.pkl', 'wb') as i:
+            pickle.dump(info, i)
+            
+        with open(path + 'balance_sheet.pkl', 'wb') as b:
+            pickle.dump(balance_sheet, b)
+            
+        with open(path + 'cashflow.pkl', 'wb') as c:
+            pickle.dump(cashflow, c)
+            
+        with open(path + 'financials.pkl', 'wb') as f:
+            pickle.dump(financials, f)
+            
+        with open(path + 'analysis.pkl', 'wb') as a:
+            pickle.dump(analysis, a)
+            
+        with open(path + 'history.pkl', 'wb') as h:
+            pickle.dump(history, h)
+        
+    else:
+        with open(path + 'info.pkl', 'rb') as i:
+            info = pickle.load(i)
+        
+        with open(path + 'balance_sheet.pkl', 'rb') as b:
+            balance_sheet = pickle.load(b)
+            
+        with open(path + 'cashflow.pkl', 'rb') as c:
+            cashflow = pickle.load(c)
+            
+        with open(path + 'financials.pkl', 'rb') as f:
+            financials = pickle.load(f)
+            
+        with open(path + 'analysis.pkl', 'rb') as a:
+            analysis = pickle.load(a)
+            
+        with open(path + 'history.pkl', 'rb') as h:
+            history = pickle.load(h)
 
-	return i, b, c, f, a, h
+    return info, balance_sheet, cashflow, financials, analysis, history
+
 
 
 def get_free_cashflow(c):
