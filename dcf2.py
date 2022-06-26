@@ -24,7 +24,7 @@ def get_current_price(i):
 
 
 def get_chart(h):
-	chart_dates = h.index
+	chart_dates = h.index.date
 	chart_values = h["Close"].values
 
 	return chart_dates, chart_values
@@ -246,4 +246,4 @@ def get_intrinsic_value(i, terminal_value, discount_factors, margin_of_safety = 
 	fair_value_of_equity = todays_value/shares_outstanding
 	intrinsic_value = fair_value_of_equity*(1-margin_of_safety)
 
-	return intrinsic_value
+	return round(intrinsic_value, 2)
