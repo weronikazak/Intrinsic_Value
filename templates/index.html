@@ -157,7 +157,7 @@
           </div>
 
 
-          <h2 class="my-2">Current Cashflow</h2>
+          <h2 class="my-2">Cashflow</h2>
           <div class="table-responsive">
             <table class="table table-bordered table-sm">
               <thead class="thead-light">
@@ -189,36 +189,7 @@
             </table>
           </div>
 
-          <h2 class="my-2">Future Cashflow</h2>
-          <div class="table-responsive">
-            <table class="table table-bordered table-sm">
-              <thead class="thead-light">
-                <tr>
-                  {% for year in val['future_cashflows'].keys() %}
-                    <th>{{ year }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  {% for cashflow in val['future_cashflows'].values() %}
-                    <td>{{ cashflow }}</td>
-                  {% endfor %}
-                </tr>
-
-                <tr>
-                  {% for PV in val['PV_of_FFCFs'].values() %}
-                    <td>{{ PV }}</td>
-                  {% endfor %}
-                </tr>
-
-                <tr>
-                  <th colspan="{{ (val['PV_of_FFCFs']|length)-1 }}">Sum of FFCFs:</td>
-                  <th>{{ val['sum_of_FCFs'] }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          
         </main>
       </div>
     </div>
