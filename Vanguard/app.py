@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, url_for, redirect, Response, request
-from utils import *
+from scrap import *
 import dcf2
 import yfinance as yf
 
