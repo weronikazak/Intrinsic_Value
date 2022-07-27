@@ -1,11 +1,3 @@
-import numpy as np
-import os
-import pandas as pd
-import requests
-import datetime
-import requests
-from bs4 import BeautifulSoup as soup
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -17,87 +9,119 @@ from selenium.webdriver.support import expected_conditions as EC
 import selenium.webdriver.support.ui as ui
 import time
 
-CHROMEDRIVER_URL = "c:\chromedriver.exe"
+import ipywidgets as widgets
+from IPython.display import display, clear_output
+from datetime import datetime
+import os
+import shutil
+
+import pandas as pd
+
+today = str(datetime.now().date())
+download_folder = f'../files/{today}/'
+
+CHROMEDRIVER_URL = "c:\\chromedriver.exe"
 WINDOW_SIZE = "1920,1080"
 
-def get_funds():
-	URL = "https://www.vanguardinvestor.co.uk/what-we-offer/all-products"
+# Remove all obsolete folders
+def remove_folders():
+    for folder in os.listdir('../files'):
+        if today not in folder:
+            shutil.rmtree('../files/' + folder)
 
-	chrome_options = Options()
-	chrome_options.add_argument("--headless")
-	chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+# Check if data has been downloaded
+def check_if_downloaded(fund_name):
+    if not os.path.exists(download_folder):
+        remove_folders()
+        os.makedirs(download_folder)
+        
+    l = [x for x in os.listdir(download_folder) if fund_name in x]
+    
+    if len(l) > 0:
+        return True
+    else:
+        return False
+    
+# Load and return as a dataframe
+def load_fund_df(fund_name):        
+    l = [x for x in os.listdir(download_folder) if fund_name in x]
+    df = pd.read_excel(download_folder + '/' + l[0], skiprows = 8, error_bad_lines=False)
+    return df
 
-	driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
-	driver.implicitly_wait(5)
-	driver.get(URL)
+# Download or retrieve data and display
+def fund_download(change):
+    if change['type'] == 'change' and change['name'] == 'value':
+        new_fund = change['new']
+        link = funds_list[new_fund]
+    
+        if not check_if_downloaded(new_fund):
+            print('Downloading...')
+            scrap_fund(new_fund, link)
 
-	funds = {}
+        print('Plotting dataframe...')
+        df = load_fund_df(new_fund)
+        df = clean_df(df)
+        
+        with out:
+            clear_output()
+            display(df)
+    
+# Scrap and download fund
+def scrap_fund(fund_name, link):
+    CHROMEDRIVER_URL = "c:\chromedriver.exe"
+    WINDOW_SIZE = "1920,1080"
+    DOWNLOAD_URL = f'C:\\Users\\Weronika\\Desktop\\Intrinsic_Value\\Vanguard\\files\\{today}\\'
 
-	names = driver.find_elements(By.XPATH, "//h2[contains(@class, 'mr-3')]")
-	charges = driver.find_elements(By.XPATH, "//div[contains(@class, 'fund-card__text-bold') and contains(text(),'%')]")
-	for i, name in enumerate(names):
-	    funds[name.text] = charges[i].text
+    while True:
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+        chrome_options.add_experimental_option("prefs", {
+                "download.default_directory": DOWNLOAD_URL,
+                "download.prompt_for_download": False,
+                "download.directory_upgrade": True,
+                "safebrowsing_for_trusted_sources_enabled": False,
+                "safebrowsing.enabled": False
+        })
 
-	driver.close()
+        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
+        driver.implicitly_wait(15)
+        driver.get(link)
+        wait = ui.WebDriverWait(driver,15)
 
-	return funds
+        try:
+            driver.find_element(By.ID, "onetrust-reject-all-handler").click()
+            wait.until(lambda driver: driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]"))
+            driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]").click()
+            driver.implicitly_wait(10)
+        except Exception as e:
+            print("No cookies popup detected")
+            print ('-------- RETRY --------')
+            continue
 
+        try:
+            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), 'Download') and contains(text(), 'prices')]"))
+            driver.find_element(By.XPATH, "//span[contains(text(), 'Download') and contains(text(), 'prices')]").click()
+        except Exception as e:
+            print('Runtime when trying to spot the download button')
+            print ('-------- RETRY --------')
+            continue
 
-def get_fund_links(funds):
-	URL = 'https://www.vanguard.co.uk/professional/product'
-
-	chrome_options = Options()
-	chrome_options.add_argument("--headless")
-	chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-
-	driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
-	driver.implicitly_wait(5)
-	driver.get(URL)
-
-	fund_links = {}
-
-	for i, fund_name in enumerate(funds.keys()):
-	    f = driver.find_element(By.XPATH, f"//a[contains(text(), '{fund_name}')]")
-	    fund_links[fund_name] = f.get_attribute("href")
-	    print(i, f.get_attribute("href"))
-
-	driver.close()
-
-	return fund_links
-
-def scrap_funds(fund_links):
-	for link in list(fund_links.values()):
-	    chrome_options = Options()
-	    chrome_options.add_argument("--headless")
-	    chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-	    chrome_options.add_experimental_option("prefs", {
-	            "download.default_directory": r'C:\Users\Weronika\Desktop\Intrinsic_Value\Vanguard\files\\',
-	            "download.prompt_for_download": False,
-	            "download.directory_upgrade": True,
-	            "safebrowsing_for_trusted_sources_enabled": False,
-	            "safebrowsing.enabled": False
-	    })
-
-	    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
-	    driver.implicitly_wait(15)
-	    driver.get(link)
-	    wait = ui.WebDriverWait(driver,15)
-	    
-	    try:
-	        driver.find_element(By.ID, "onetrust-reject-all-handler").click()
-	        wait.until(lambda driver: driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]"))
-	        driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]").click()
-	        driver.implicitly_wait(10)
-	    except Exception as e:
-	        print(e)
-	        print(link)
-	        print("No cookies popup detected")
-	        driver.close() 
-	        break
-	    wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), 'Download') and contains(text(), 'prices')]"))
-	    driver.find_element(By.XPATH, "//span[contains(text(), 'Download') and contains(text(), 'prices')]").click()
-	    time.sleep(5)
-	    driver.close()
+        time.sleep(5)
+        driver.close()
+        print(f'Fund {fund_name} downloaded.')
+        return False
+    
+# Clean dataframe
+def clean_df(df):
+    df['Date'] = pd.to_datetime(df['Date'])
+    df[df.columns[1]] = df[df.columns[1]].str.replace('£', '')
+    df[df.columns[1]] = df[df.columns[1]].str.replace('CHF', '')
+    df[df.columns[1]] = df[df.columns[1]].str.replace('€', '')
+    df[df.columns[1]] = df[df.columns[1]].str.replace('$', '')
+    df[df.columns[1]] = df[df.columns[1]].str.replace('A', '')
+    df[df.columns[1]] = df[df.columns[1]].astype(float)
+    return df
 
 
 if __name__ == '__main__':
