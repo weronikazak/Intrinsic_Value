@@ -77,11 +77,11 @@ def scrap_fund(fund_name, link):
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
         chrome_options.add_experimental_option("prefs", {
-                "download.default_directory": DOWNLOAD_URL,
-                "download.prompt_for_download": False,
-                "download.directory_upgrade": True,
-                "safebrowsing_for_trusted_sources_enabled": False,
-                "safebrowsing.enabled": False
+            "download.default_directory": DOWNLOAD_URL,
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing_for_trusted_sources_enabled": False,
+            "safebrowsing.enabled": False
         })
 
         driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
