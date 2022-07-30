@@ -30,6 +30,10 @@ class Dashboard():
 
 
 		self.main_plot = Line_Plot(self.app, self.data.df, self.data.funds)
+		
+		funds = []
+		for fund in fund_list:
+			funds.append({"label":fund, "value":fund})
 
 		self.handle_layout()
 
@@ -44,7 +48,6 @@ class Dashboard():
 				style={
 					"width":'85vw',
 					'background':'red',
-					# "min-height":"100vh",
 					'display':'inline-block'
 				},
 				id="graph-layout")

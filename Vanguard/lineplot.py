@@ -19,6 +19,7 @@ class Line_Plot():
 		funds = []
 		for fund in fund_list:
 			funds.append({"label":fund, "value":fund})
+		print(funds)
 
 		self.graph = html.Div([dcc.Graph(id="graph-line")],
 			style={
@@ -55,10 +56,10 @@ class Line_Plot():
 
 	def update_funds_plot(self, funds, date):
 		df = self.data
-		# print(date)
+		print(df)
 		columns = df.columns
 
-		fig = px.line(df, x=columns[0], y=columns[2], color="Fund")
+		fig = px.line(df, x=columns[0], y=columns[1])
 
 		# # fig.update_layout(margin={'l': 40, 'b': 10, 't': 10, 'r': 40},
 		# # 	hovermode='closest', showlegend=False)
