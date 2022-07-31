@@ -23,11 +23,13 @@ download_folder = f'../files/{today}/'
 CHROMEDRIVER_URL = "c:\\chromedriver.exe"
 WINDOW_SIZE = "1920,1080"
 
+
 # Remove all obsolete folders
 def remove_folders():
     for folder in os.listdir('../files'):
         if today not in folder:
             shutil.rmtree('../files/' + folder)
+
 
 # Check if data has been downloaded
 def check_if_downloaded(fund_name):
@@ -42,30 +44,29 @@ def check_if_downloaded(fund_name):
     else:
         return False
     
+
 # Load and return as a dataframe
 def load_fund_df(fund_name):        
     l = [x for x in os.listdir(download_folder) if fund_name in x]
     df = pd.read_excel(download_folder + '/' + l[0], skiprows = 8, error_bad_lines=False)
     return df
 
-# Download or retrieve data and display
-def fund_download(change):
-    if change['type'] == 'change' and change['name'] == 'value':
-        new_fund = change['new']
-        link = funds_list[new_fund]
-    
-        if not check_if_downloaded(new_fund):
-            print('Downloading...')
-            scrap_fund(new_fund, link)
 
-        print('Plotting dataframe...')
-        df = load_fund_df(new_fund)
-        df = clean_df(df)
-        
-        with out:
-            clear_output()
-            display(df)
+# Download or retrieve data and display
+def fund_download(new_fund):
+    link = funds_list[new_fund]
+
+    if not check_if_downloaded(new_fund):
+        print('Downloading...')
+        scrap_fund(new_fund, link)
+
+    print('Plotting dataframe...')
+    df = load_fund_df(new_fund)
+    df = clean_df(df)
     
+    return df
+
+
 # Scrap and download fund
 def scrap_fund(fund_name, link):
     CHROMEDRIVER_URL = "c:\chromedriver.exe"
@@ -112,6 +113,7 @@ def scrap_fund(fund_name, link):
         print(f'Fund {fund_name} downloaded.')
         return False
     
+
 # Clean dataframe
 def clean_df(df):
     df['Date'] = pd.to_datetime(df['Date'])
@@ -122,9 +124,3 @@ def clean_df(df):
     df[df.columns[1]] = df[df.columns[1]].str.replace('A', '')
     df[df.columns[1]] = df[df.columns[1]].astype(float)
     return df
-
-
-if __name__ == '__main__':
-	funds = get_funds()
-	fund_links = get_fund_links(funds)
-	scrap_funds(fund_links)
