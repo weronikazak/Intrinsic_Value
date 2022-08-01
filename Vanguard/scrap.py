@@ -18,26 +18,26 @@ import shutil
 import pandas as pd
 
 today = str(datetime.now().date())
-download_folder = f'../files/{today}/'
 
+DOWNLOAD_FOLDER = f'./files/{today}/'
 CHROMEDRIVER_URL = "c:\\chromedriver.exe"
 WINDOW_SIZE = "1920,1080"
 
 
 # Remove all obsolete folders
 def remove_folders():
-    for folder in os.listdir('../files'):
+    for folder in os.listdir('./files'):
         if today not in folder:
-            shutil.rmtree('../files/' + folder)
+            shutil.rmtree('./files/' + folder)
 
 
 # Check if data has been downloaded
 def check_if_downloaded(fund_name):
-    if not os.path.exists(download_folder):
+    if not os.path.exists(DOWNLOAD_FOLDER):
         remove_folders()
-        os.makedirs(download_folder)
+        os.makedirs(DOWNLOAD_FOLDER)
         
-    l = [x for x in os.listdir(download_folder) if fund_name in x]
+    l = [x for x in os.listdir(DOWNLOAD_FOLDER) if fund_name in x]
     
     if len(l) > 0:
         return True
@@ -47,13 +47,23 @@ def check_if_downloaded(fund_name):
 
 # Load and return as a dataframe
 def load_fund_df(fund_name):        
-    l = [x for x in os.listdir(download_folder) if fund_name in x]
-    df = pd.read_excel(download_folder + '/' + l[0], skiprows = 8, error_bad_lines=False)
+    l = [x for x in os.listdir(DOWNLOAD_FOLDER) if fund_name in x]
+    df = pd.read_excel(DOWNLOAD_FOLDER + '/' + l[0], skiprows = 8, error_bad_lines=False)
     return df
+
+
+def get_fund_list():
+    funds_list = {}
+    with open('./funds.txt', 'r') as file:
+        for line in file:
+            name, link = line.split('#')
+            funds_list[name] = link
+    return funds_list
 
 
 # Download or retrieve data and display
 def fund_download(new_fund):
+    funds_list = get_fund_list()
     link = funds_list[new_fund]
 
     if not check_if_downloaded(new_fund):

@@ -73,122 +73,16 @@
           <div class="container col-12">
             <div class="row">
               <div class="col-12 col-lg-9">
-                <canvas class="my-4" id="myChart" width="900" height="380"></canvas>
-              </div>
-  
-              <div class="col-12 col-lg-3">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-sm ">
-                    <tbody>
-                      <tr>
-                        <th class="bg-light py-4"> Intrinsic Value </th>
-                        <td>{{ val["price_per_share"] }}</td>
-                      </tr>
-  
-                      <tr>
-                        <th class="bg-light py-4"> Current Value </th>
-                        <td>{{ val['current_price_per_share'] }}</td>
-                      </tr>
-  
-                      <tr>
-                        <th class="bg-light py-4"> Difference </th>
-                        <td>TODO</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="chart" id="bargraph">
+                  <script>
+                      var graphs = {{plot | safe}};
+                      Plotly.plot('bargraph', graphs);
+                  </script>
                 </div>
               </div>
+
             </div>
           </div>
-          
-
-          <h2 class="my-2">Stats</h2>
-          <div class="container col-12 row">
-            <div class="col-6">
-              <div class="table-responsive">
-                <table class="table table-bordered table-sm">
-                  <tbody>
-                    <tr>
-                      <th class="bg-light"> Cash and Equivalent </th>
-                      <td>{{ val["cash_and_eq"] }}</td>
-                    </tr>
-
-                    <tr>
-                      <th class="bg-light"> Total Debt </th>
-                      <td>{{ val["total_debt"] }}</td>
-                    </tr>
-
-                    <tr>
-                      <th class="bg-light"> Shares Outstanding </th>
-                      <td>{{ val["shares_outstanding"] }}</td>
-                    </tr>
-
-                    <tr>
-                      <th class="bg-light"> Equity Value </th>
-                      <td>{{ val["equity_value"] }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="col-6">
-              <div class="table-responsive">
-                <table class="table table-bordered table-sm">
-                  <tbody>
-                    <tr>
-                      <th class="bg-light"> Intrinsic Value </th>
-                      <td>{{ val["price_per_share"] }}</td>
-                    </tr>
-
-                    <tr>
-                      <th class="bg-light"> Current Value </th>
-                      <td>{{ val['current_price_per_share'] }}</td>
-                    </tr>
-
-                    <tr>
-                      <th class="bg-light"> Difference </th>
-                      <td>TODO</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-
-          <h2 class="my-2">Cashflow</h2>
-          <div class="table-responsive">
-            <table class="table table-bordered table-sm">
-              <thead class="thead-light">
-                <tr>
-                  {% for year in val['cashflows'].keys() %}
-                    <th>{{ year }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  {% for cashflow in val['cashflows'].values() %}
-                    <td>{{ cashflow }}</td>
-                  {% endfor %}
-                </tr>
-
-                <tr>
-                  <td>-</td>
-                  {% for rate in val['growth_rates'].values() %}
-                    <td>{{ rate }}</td>
-                  {% endfor %}
-                </tr>
-
-                <tr>
-                  <th colspan="{{ (val['cashflows']|length)-1 }}">Average Growth Rate:</td>
-                  <th>{{ val['avg_growth_rate'] }}</th>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-
           
         </main>
       </div>
@@ -200,57 +94,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
-    <!-- Icons -->
-    <!-- <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script> -->
-    <!-- <script>
-      feather.replace()
-    </script> -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <!-- Graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.1/dist/Chart.min.js"></script>
-    <script>
-       $(function(){
-        $(".dropdown-menu a").click(function(){
-          $(".dropdown-toggle").text($(this).text());
-          $(".dropdown-toggle").val($(this).text());
-        });
-      });
-
-      var ctx = document.getElementById("myChart");
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: [
-                  {% for date in val['chart_dates'] %}
-                    "{{ date }}",
-                  {% endfor %}
-                ],
-          datasets: [{
-            data: [
-              {% for value in val['chart_values'] %}
-                      {{ value }},
-                {% endfor %}
-              ],
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: '#007bff',
-            borderWidth: 2,
-            pointBackgroundColor: '#007bff'
-          }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          },
-          legend: {
-            display: false,
-          }
-        }
-      });
-    </script>
   </body>
 </html>
