@@ -19,18 +19,18 @@ def index():
 
 
 def create_plot(df):
-	x = df[df.columns[0]]
-	y = df[df.columns[1]]
+	x = df[df.columns[0]].values
+	y = df[df.columns[1]].values
 
-	fund_data = go.Scatter(x=x, y=y)
 
-	layout = go.Layout(height=800, width=1000, title='Time Series')
+	fund_data = go.Figure(data=go.Scatter(
+						x=x, 
+                        y=y,
+                        marker_color='blue', 
+						text="Index Price"))
 
-	data = [
-		go.Figure(
-			data=[fund_data], layout=layout
-		)
-	]
+
+	data = fund_data
 
 	graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
 	return graphJSON
