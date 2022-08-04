@@ -76,10 +76,17 @@
           <div class="container col-12">
             <div class="row">
               <div class="col-12 col-lg-9">
+                <div class="chart" id="plotgraph">
+                  <script>
+                      var linegraphs = {{plot_line | safe}};
+                      Plotly.plot('plotgraph', linegraphs, {});
+                  </script>
+                </div>
+
                 <div class="chart" id="bargraph">
                   <script>
-                      var graphs = {{plot | safe}};
-                      Plotly.plot('bargraph', graphs, {});
+                      var bargraphs = {{plot_bar | safe}};
+                      Plotly.plot('bargraph', bargraphs, {});
                   </script>
                 </div>
               </div>
