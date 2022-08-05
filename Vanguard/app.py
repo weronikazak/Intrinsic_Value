@@ -12,10 +12,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	fund = list(get_fund_list().keys())[0]
-	df = fund_download(fund)
+	fund_list = list(get_fund_list().keys())
+	df = fund_download(fund_list[0])
 	graph_line, graph_bar = create_plot(df)
-	return render_template('index.html', plot_line=graph_line, plot_bar=graph_bar)
+	return render_template('index.html', plot_line=graph_line, plot_bar=graph_bar, fund_list=fund_list)
 
 
 def create_plot(df):

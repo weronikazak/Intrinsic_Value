@@ -45,24 +45,13 @@
             <form>
               
               <div class="form-group">
-                <label for="economicGrowth">Economic Growth</label>
-                <input type="number" class="form-control" id="economicGrowth" name="economicGrowth" aria-describedby="economicGrowth" placeholder="Economic Growth" value="2.5">
-                <small class="form-text text-muted">Economic Growth. Usually between 2.5% - 3%.</small>
-              </div>
-              
-              <div class="form-group">
-                <label for="discountRate">Discount Rate</label>
-                <input type="number" class="form-control" id="growthRate" placeholder="growthRate" value="10">
-                <small class="form-text text-muted">A rate you want the business to be at discount (5% for bear market, up to 20% for bull market).</small>
-              </div>
-
-              <div class="form-group">
-                <label for="holdYears">Hold Over Years</label>
-                <input type="number" class="form-control" id="holdYears" placeholder="holdYears" value="10">
-                <small class="form-text text-muted">Hold over x years.</small>
-              </div>
-
-              <button type="submit" class="btn btn-primary w-100">Apply</button>
+                <label for="funds">Choose funds</label>
+                <select class="form-control" aria-label="Fund labels" name="funds">
+                  {{ fund_list }}
+                  {% for fund in fund_list %}
+                    <option value="{{ fund }}">{{ fund }}</option>
+                  {% endfor %}
+                </select>
             
             </form>
           </div>
