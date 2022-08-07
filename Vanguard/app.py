@@ -29,17 +29,25 @@ def create_plot(df):
                         marker_color='blue', 
 						text="Index Price"))
 
-	df_bars = df.groupby(df.Date.dt.year).mean()
+	df_bars = df.groupby(df.Date.dt.year).mean().reset_index()
+
 	bars_data = go.Figure(data=go.Bar(
-						x=df_bars.index, 
-                        y=df_bars[df_bars.columns[0]].values,
-                        marker_color='blue'))
+						x=df_bars[df_bars.columns[0]].values, 
+                        y=df_bars[df_bars.columns[1]].values,
+                        marker_color='blue',
+						text =df_bars.columns[1],
+    					textposition='outside'))
+
+	bars_data.update_xaxes(
+						title_text = df_bars.columns[0],
+						title_font = {"size": 20},
+						title_standoff = 25)
+
 	bars_data.add_hline(y=df[df.columns[1]].mean(), line_dash="dot",
-              annotation_text=f"Mean: {df[df.columns[1]].mean()}", 
-              annotation_position="bottom right",
-              annotation_font_size=12,
-              annotation_font_color="black"
-             )
+						annotation_text=f"Mean: {round(df[df.columns[1]].mean(), 2)}", 
+						annotation_position="bottom right",
+						annotation_font_size=12,
+						annotation_font_color="black")
 
 
 	graph_line = json.dumps(fund_data, cls=plotly.utils.PlotlyJSONEncoder)
