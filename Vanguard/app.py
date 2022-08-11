@@ -35,20 +35,16 @@ def create_plot(df):
 						x=df_bars[df_bars.columns[0]].values, 
                         y=df_bars[df_bars.columns[1]].values,
                         marker_color='blue',
-						text =df_bars.columns[1],
+						text =df_bars[df_bars.columns[1]].values,
     					textposition='outside'))
 
-	bars_data.update_xaxes(
-						title_text = df_bars.columns[0],
-						title_font = {"size": 20},
-						title_standoff = 25)
+	bars_data.update_traces(texttemplate='%{text:.2f}', textposition='inside')
 
 	bars_data.add_hline(y=df[df.columns[1]].mean(), line_dash="dot",
 						annotation_text=f"Mean: {round(df[df.columns[1]].mean(), 2)}", 
-						annotation_position="bottom right",
+						annotation_position="bottom left",
 						annotation_font_size=12,
 						annotation_font_color="black")
-
 
 	graph_line = json.dumps(fund_data, cls=plotly.utils.PlotlyJSONEncoder)
 	graph_bar = json.dumps(bars_data, cls=plotly.utils.PlotlyJSONEncoder)
