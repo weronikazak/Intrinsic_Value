@@ -9,23 +9,20 @@ from scrap import *
 
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
-	'position': 'fixed',
-	'top': 0,
-	'left': 0,
-	'bottom': 0,
 	'width': '20vw',
-	'padding': '20px 10px',
 	'background-color': '#f8f9fa',
-	'float': 'left'
+	'float':'left',
+	'display':'inline',
+	'height': '100vh'
 }
 
 # the style arguments for the main content page.
 CONTENT_STYLE = {
-	# 'width':'70vw',
-	# 'margin-left': '25vw',
-	'padding': '20px 10p',
-	'float': 'left',
-	'position': 'relative'
+	'width':'80vw',
+	# 'minHeight': '100vh',
+	# 'overflowY':'scroll',
+	'float':'left',
+	'display':'inline'
 }
 
 TEXT_STYLE = {
@@ -66,10 +63,9 @@ sidebar = html.Div(
 
 content_row = html.Div(
 	[
-		dcc.Graph(id='graph_timeseries'),
-		html.Br(),
-		dcc.Graph(id='graph_bars')
-	]
+		dcc.Graph(id='graph_timeseries', style={"height": "60vh"}),
+		dcc.Graph(id='graph_bars', style={"height": "60vh"})
+	], style={'overflowY':'scroll'}
 )
 
 content = html.Div(
@@ -84,7 +80,7 @@ content = html.Div(
 app = dash.Dash(suppress_callback_exceptions=True,
 				external_stylesheets=["https://codepen.io/chriddyp/pen/bWLwgP.css", 
 				"assets/style.css"])
-app.layout = html.Div([sidebar, content], style={'overflowY':'scroll', 'float':'left'})
+app.layout = html.Div([sidebar, content], style={'width': '100vw', 'margin': 0})
 
 
 @app.callback(
