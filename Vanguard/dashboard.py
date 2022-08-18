@@ -9,25 +9,37 @@ from scrap import *
 
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
+	"position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
 	'width': '20vw',
 	'background-color': '#f8f9fa',
 	'float':'left',
-	'display':'inline',
-	'height': '100vh'
 }
 
 # the style arguments for the main content page.
 CONTENT_STYLE = {
+	"position": "fixed",
+    "top": 0,
+    "left": 0,
+    "bottom": 0,
 	'width':'80vw',
-	# 'minHeight': '100vh',
-	# 'overflowY':'scroll',
 	'float':'left',
-	'display':'inline'
+	"display": "inline-block",
+	'marginLeft':'20vw',
+	'overflowY':'scroll'
 }
 
 TEXT_STYLE = {
 	'textAlign': 'center',
 	'color': '#191970'
+}
+
+
+GRAPH_STYLE = {
+	'height': 600,
+	'display':'block'
 }
 
 dropdown_categories = [{'label': val, 'value': val} for val in list(get_fund_list().keys())]
@@ -61,18 +73,12 @@ sidebar = html.Div(
 	style=SIDEBAR_STYLE,
 )
 
-content_row = html.Div(
-	[
-		dcc.Graph(id='graph_timeseries', style={"height": "60vh"}),
-		dcc.Graph(id='graph_bars', style={"height": "60vh"})
-	], style={'overflowY':'scroll'}
-)
-
 content = html.Div(
-	[
+	children=[
 		html.H2('Index Funds', style=TEXT_STYLE),
 		html.Hr(),
-		content_row,
+		dcc.Graph(id='graph_timeseries', style=GRAPH_STYLE),
+		dcc.Graph(id='graph_bars', style=GRAPH_STYLE),
 	],
 	style=CONTENT_STYLE
 )
@@ -80,7 +86,7 @@ content = html.Div(
 app = dash.Dash(suppress_callback_exceptions=True,
 				external_stylesheets=["https://codepen.io/chriddyp/pen/bWLwgP.css", 
 				"assets/style.css"])
-app.layout = html.Div([sidebar, content], style={'width': '100vw', 'margin': 0})
+app.layout = html.Div([sidebar, content])
 
 
 @app.callback(
