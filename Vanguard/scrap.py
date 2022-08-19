@@ -63,6 +63,9 @@ def get_fund_list():
 
 # Download or retrieve data and display
 def fund_download(new_fund):
+    if type(new_fund) == list:
+        new_fund = new_fund[0]
+
     funds_list = get_fund_list()
     link = funds_list[new_fund]
 
@@ -116,6 +119,7 @@ def scrap_fund(fund_name, link):
         except Exception as e:
             print('Runtime when trying to spot the download button')
             print ('-------- RETRY --------')
+            print (fund_name)
             continue
 
         time.sleep(5)

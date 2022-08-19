@@ -2,6 +2,7 @@ import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 
 import plotly.express as px
 
@@ -52,7 +53,7 @@ controls = html.Div(
 		dcc.Dropdown(
 			id='dropdown',
 			options=dropdown_categories,
-			value=dropdown_categories[0],  # default value
+			value=[dropdown_categories[0]['value']],  # default value
 			multi=True
 		),
 		html.Br(),
@@ -91,39 +92,75 @@ app.layout = html.Div([sidebar, content])
 
 @app.callback(
 	Output('graph_timeseries', 'figure'),
-	[Input('submit_button', 'n_clicks')],
-	[State('dropdown', 'value')])
+	[Input('submit_button', 'n_clicks'),
+	Input('dropdown', 'value')])
 def update_graph_timeseries(n_clicks, dropdown_value):
-	df = fund_download(dropdown_value['value'])
+	if not dropdown_value:
+		raise PreventUpdate
+	fig = 0
+	print('----------------------')
+	print('----------------------')
 
-	x = df[df.columns[0]].values
-	y = df[df.columns[1]].values
+	print(dropdown_value)
+	print('----------------------')
+	print('----------------------')
 
-	fig = px.line(df, x=x, y = y)
+	if len(list(dropdown_value)) == 1:
+		df = fund_download(dropdown_value)
+
+		x = df[df.columns[0]].values
+		y = df[df.columns[1]].values
+
+		fig = px.line(df, x=x, y = y)	
+	elif len(list(dropdown_value)) > 1:	
+		xs = []
+		ys = []
+		for val in dropdown_value:
+			print('----------------------')
+			print('----------------------')
+
+			print(val)
+			print('----------------------')
+			print('----------------------')
+
+			df = fund_download(val)
+
+			x = df[df.columns[0]].values
+			y = df[df.columns[1]].values
+
+			xs.append(x)
+			ys.append(y)
+
+		fig = px.line(df, x=xs, y = ys)
 	return fig
 
 @app.callback(
 	Output('graph_bars', 'figure'),
-	[Input('submit_button', 'n_clicks')],
-	[State('dropdown', 'value')])
+	[Input('submit_button', 'n_clicks'),
+	Input('dropdown', 'value')])
 def update_graph_timeseries(n_clicks, dropdown_value):
-	df = fund_download(dropdown_value['value'])
+	if not dropdown_value:
+		raise PreventUpdate
+	
+	if (len(list(dropdown_value))) == 1:
+		df = fund_download(dropdown_value)
 
-	df_bars = df.groupby(df.Date.dt.year).mean().reset_index()
+		df_bars = df.groupby(df.Date.dt.year).mean().reset_index()
 
-	x = df_bars[df_bars.columns[0]].values
-	y = df_bars[df_bars.columns[1]].values
+		x = df_bars[df_bars.columns[0]].values
+		y = df_bars[df_bars.columns[1]].values
 
-	fig = px.bar(df_bars, x=x, y = y)
+		fig = px.bar(df_bars, x=x, y = y)
 
-	# fig.update_traces(texttemplate='%{text:.2f}', textposition='inside')
+		# fig.update_traces(texttemplate='%{text:.2f}', textposition='inside')
 
-	fig.add_hline(y=df[df.columns[1]].mean(), line_dash="dot",
-						annotation_text=f"Mean: {round(df[df.columns[1]].mean(), 2)}", 
-						annotation_position="bottom left",
-						annotation_font_size=12,
-						annotation_font_color="black")
-	return fig
+		fig.add_hline(y=df[df.columns[1]].mean(), line_dash="dot",
+							annotation_text=f"Mean: {round(df[df.columns[1]].mean(), 2)}", 
+							annotation_position="bottom left",
+							annotation_font_size=12,
+							annotation_font_color="black")
+		return fig
+	return
 
 if __name__ == '__main__':
 	app.run_server(port='8085')
