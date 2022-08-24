@@ -112,26 +112,45 @@ def update_graph_timeseries(n_clicks, dropdown_value):
 		y = df[df.columns[1]].values
 
 		fig = px.line(df, x=x, y = y)	
+		fig.update_xaxes(
+			rangeslider_visible=True,
+			rangeselector=dict(
+				buttons=list([
+					dict(count=1, label="1m", step="month", stepmode="backward"),
+					dict(count=6, label="6m", step="month", stepmode="backward"),
+					dict(count=1, label="YTD", step="year", stepmode="todate"),
+					dict(count=1, label="1y", step="year", stepmode="backward"),
+					dict(step="all")
+				])
+			)
+		)
 	elif len(list(dropdown_value)) > 1:	
-		xs = []
-		ys = []
+		data = pd.DataFrame(columns=['Date'])
+		
 		for val in dropdown_value:
 			print('----------------------')
 			print('----------------------')
-
 			print(val)
 			print('----------------------')
 			print('----------------------')
 
 			df = fund_download(val)
+			df.columns = ['Date', val]
+			data = pd.merge(data, df, how='outer', on='Date')
 
-			x = df[df.columns[0]].values
-			y = df[df.columns[1]].values
-
-			xs.append(x)
-			ys.append(y)
-
-		fig = px.line(df, x=xs, y = ys)
+		fig = px.line(data, x='Date', y = data.columns)
+		fig.update_xaxes(
+			# rangeslider_visible=True,
+			rangeselector=dict(
+				buttons=list([
+					dict(count=1, label="1m", step="month", stepmode="backward"),
+					dict(count=6, label="6m", step="month", stepmode="backward"),
+					dict(count=1, label="YTD", step="year", stepmode="todate"),
+					dict(count=1, label="1y", step="year", stepmode="backward"),
+					dict(step="all")
+				])
+			)
+		)
 	return fig
 
 @app.callback(
