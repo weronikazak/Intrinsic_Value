@@ -79,6 +79,7 @@ content = html.Div(
 		html.H2('Index Funds', style=TEXT_STYLE),
 		html.Hr(),
 		dcc.Graph(id='graph_timeseries', style=GRAPH_STYLE),
+		# dcc.Graph(id='graph_time_multi', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_bars', style=GRAPH_STYLE),
 	],
 	style=CONTENT_STYLE
@@ -152,6 +153,33 @@ def update_graph_timeseries(n_clicks, dropdown_value):
 			)
 		)
 	return fig
+
+# @app.callback(
+# 	Output('graph_time_multi', 'figure'),
+# 	[Input('submit_button', 'n_clicks'),
+# 	Input('dropdown', 'value')])
+# def update_graph_timeseries(n_clicks, dropdown_value):
+# 	if not dropdown_value:
+# 		raise PreventUpdate
+	
+# 	if (len(list(dropdown_value))) > 1:
+# 		cols = 2
+# 		rows = int(len(list(dropdown_value))/2)
+		
+# 		fig = make_subplots(rows=rows, cols=cols)
+
+# 		for col in range(cols):
+# 			for row in range(rows):
+# 				id_graph = col * 2 + row
+
+# 				df = fund_download(dropdown_value[id_graph])
+
+# 				fig.add_trace(
+# 					go.Scatter(x=df[df.columns[0]], y=df[df.columns[1]]),
+# 					row=row, col=col, secondary_y=False)
+		
+# 		return fig
+# 	return
 
 @app.callback(
 	Output('graph_bars', 'figure'),
