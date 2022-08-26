@@ -8,6 +8,8 @@ import plotly.express as px
 
 from scrap import *
 
+import numpy as np
+
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
 	"position": "fixed",
@@ -79,7 +81,7 @@ content = html.Div(
 		html.H2('Index Funds', style=TEXT_STYLE),
 		html.Hr(),
 		dcc.Graph(id='graph_timeseries', style=GRAPH_STYLE),
-		# dcc.Graph(id='graph_time_multi', style=GRAPH_STYLE),
+		dcc.Graph(id='graph_time_multi', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_bars', style=GRAPH_STYLE),
 	],
 	style=CONTENT_STYLE
@@ -95,7 +97,7 @@ app.layout = html.Div([sidebar, content])
 	Output('graph_timeseries', 'figure'),
 	[Input('submit_button', 'n_clicks'),
 	Input('dropdown', 'value')])
-def update_graph_timeseries(n_clicks, dropdown_value):
+def update_line_graph_timeseries(n_clicks, dropdown_value):
 	if not dropdown_value:
 		raise PreventUpdate
 	fig = 0
@@ -154,38 +156,38 @@ def update_graph_timeseries(n_clicks, dropdown_value):
 		)
 	return fig
 
-# @app.callback(
-# 	Output('graph_time_multi', 'figure'),
-# 	[Input('submit_button', 'n_clicks'),
-# 	Input('dropdown', 'value')])
-# def update_graph_timeseries(n_clicks, dropdown_value):
-# 	if not dropdown_value:
-# 		raise PreventUpdate
+@app.callback(
+	Output('graph_time_multi', 'figure'),
+	[Input('submit_button', 'n_clicks'),
+	Input('dropdown', 'value')])
+def update_area_graph_timeseries(n_clicks, dropdown_value):
+	if not dropdown_value:
+		raise PreventUpdate
 	
-# 	if (len(list(dropdown_value))) > 1:
-# 		cols = 2
-# 		rows = int(len(list(dropdown_value))/2)
-		
-# 		fig = make_subplots(rows=rows, cols=cols)
+	data = pd.DataFrame(columns=['Date'])
 
-# 		for col in range(cols):
-# 			for row in range(rows):
-# 				id_graph = col * 2 + row
+	for val in dropdown_value:
+		print('----------------------')
+		print('----------------------')
+		print(val)
+		print('----------------------')
+		print('----------------------')
 
-# 				df = fund_download(dropdown_value[id_graph])
+		df = fund_download(val)
+		df.columns = ['Date', val]
+		data = pd.merge(data, df, how='outer', on='Date')
 
-# 				fig.add_trace(
-# 					go.Scatter(x=df[df.columns[0]], y=df[df.columns[1]]),
-# 					row=row, col=col, secondary_y=False)
-		
-# 		return fig
-# 	return
+	data.columns.name = 'funds'
+	data = data.set_index('Date')
+	fig = px.area(data, facet_col='funds', facet_col_wrap=2)
+
+	return fig
 
 @app.callback(
 	Output('graph_bars', 'figure'),
 	[Input('submit_button', 'n_clicks'),
 	Input('dropdown', 'value')])
-def update_graph_timeseries(n_clicks, dropdown_value):
+def update_bar_graph_timeseries(n_clicks, dropdown_value):
 	if not dropdown_value:
 		raise PreventUpdate
 	
@@ -197,6 +199,9 @@ def update_graph_timeseries(n_clicks, dropdown_value):
 		x = df_bars[df_bars.columns[0]].values
 		y = df_bars[df_bars.columns[1]].values
 
+		x = np.insert(x, 0, x[0]-1)
+		y = np.insert(y, 0, 100)
+
 		fig = px.bar(df_bars, x=x, y = y)
 
 		# fig.update_traces(texttemplate='%{text:.2f}', textposition='inside')
@@ -206,6 +211,11 @@ def update_graph_timeseries(n_clicks, dropdown_value):
 							annotation_position="bottom left",
 							annotation_font_size=12,
 							annotation_font_color="black")
+		
+		fig.update_xaxes(
+			ticklabelstep=1,
+			dtick="M1",
+			tickformat="%b\n%Y")
 		return fig
 	return
 
