@@ -1,45 +1,22 @@
-LifeStrategy® 20% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/lifestrategy/9235/lifestrategy-20-equity-fund-gbp-acc
-LifeStrategy® 40% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/lifestrategy/9238/lifestrategy-40-equity-fund-gbp-acc
-LifeStrategy® 60% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/lifestrategy/9241/lifestrategy-60-equity-fund-gbp-acc
-LifeStrategy® 80% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/lifestrategy/9244/lifestrategy-80-equity-fund-gbp-acc
-LifeStrategy® 100% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/lifestrategy/9232/lifestrategy-100-equity-fund-gbp-acc
-SustainableLife 40-50% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/balanced/E016/sustainablelife-40-50-equity-fund-gbp-acc
-SustainableLife 60-70% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/balanced/9415/sustainablelife-60-70-equity-fund-gbp-acc
-SustainableLife 80-90% Equity Fund#https://www.vanguard.co.uk/professional/product/fund/balanced/E018/sustainablelife-80-90-equity-fund-gbp-acc
-Target Retirement 2015 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9665/target-retirement-2015-fund-gbp-acc
-Target Retirement 2020 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9666/target-retirement-2020-fund-gbp-acc
-Target Retirement 2025 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9667/target-retirement-2025-fund-gbp-acc
-Target Retirement 2030 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9668/target-retirement-2030-fund-gbp-acc
-Target Retirement 2035 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9669/target-retirement-2035-fund-gbp-acc
-Target Retirement 2040 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9670/target-retirement-2040-fund-gbp-acc
-Target Retirement 2045 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9671/target-retirement-2045-fund-gbp-acc
-Target Retirement 2050 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9672/target-retirement-2050-fund-gbp-acc
-Target Retirement 2055 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9673/target-retirement-2055-fund-gbp-acc
-Target Retirement 2060 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9638/target-retirement-2060-fund-gbp-acc
-Target Retirement 2065 Fund#https://www.vanguard.co.uk/professional/product/fund/target-retirement/9639/target-retirement-2065-fund-gbp-acc
+S&P 500 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating
+FTSE Developed World ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9210/ftse-developed-world-ex-uk-equity-index-fund-gbp-acc
+FTSE Developed World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9675/ftse-developed-world-ucits-etf-usd-accumulating
+FTSE Developed Europe ex UK UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9682/ftse-developed-europe-ex-uk-ucits-etf-eur-accumulating
+FTSE Developed Europe ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9214/ftse-developed-europe-ex-uk-equity-index-fund-gbp-acc
+Global Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9138/global-bond-index-fund-chf-hedged-acc
+FTSE All-World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating
 Active U.K. Equity Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9546/active-uk-equity-fund-gbp-acc
-Emerging Markets Bond Fund#https://www.vanguard.co.uk/professional/product/fund/bond/E020/emerging-markets-bond-fund-institutional-chf-hedged-acc
 Emerging Markets Stock Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9229/emerging-markets-stock-index-fund-eur-acc
 ESG Developed World All Cap Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9526/esg-developed-world-all-cap-equity-index-fund-uk-gbp-acc
 ESG Developed World All Cap Equity Index Fund (UK)#https://www.vanguard.co.uk/professional/product/fund/equity/9526/esg-developed-world-all-cap-equity-index-fund-uk-gbp-acc
 ESG Emerging Markets All Cap Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/E028/esg-emerging-markets-all-cap-equity-index-fund-chf-acc
 ESG Global All Cap UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9470/esg-global-all-cap-ucits-etf-usd-accumulating
-ESG Global Corporate Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9474/esg-global-corporate-bond-ucits-etf-chf-hedged-accumulating
-EUR Corporate Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9695/eur-corporate-bond-ucits-etf-eur-accumulating
-EUR Eurozone Government Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9591/eur-eurozone-government-bond-ucits-etf-eur-accumulating
-Euro Government Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/E029/euro-government-bond-index-fund-chf-hedged-acc
-Euro Investment Grade Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9991/euro-investment-grade-bond-index-fund-eur-acc
 FTSE 100 Index Unit Trust#https://www.vanguard.co.uk/professional/product/fund/equity/8619/ftse-100-index-unit-trust-gbp-acc
 FTSE 100 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9580/ftse-100-ucits-etf-gbp-accumulating
 FTSE 250 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9581/ftse-250-ucits-etf-gbp-accumulating
 FTSE All-World High Dividend Yield UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9677/ftse-all-world-high-dividend-yield-ucits-etf-usd-accumulating
-FTSE All-World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating
 FTSE Developed Asia Pacific ex Japan UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9676/ftse-developed-asia-pacific-ex-japan-ucits-etf-usd-accumulating
-FTSE Developed Europe ex UK UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9682/ftse-developed-europe-ex-uk-ucits-etf-eur-accumulating
-FTSE Developed Europe ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9214/ftse-developed-europe-ex-uk-equity-index-fund-gbp-acc
 FTSE Developed Europe UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9681/ftse-developed-europe-ucits-etf-eur-accumulating
-FTSE Developed World ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9210/ftse-developed-world-ex-uk-equity-index-fund-gbp-acc
-FTSE Developed World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9675/ftse-developed-world-ucits-etf-usd-accumulating
 FTSE Emerging Markets UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9678/ftse-emerging-markets-ucits-etf-usd-accumulating
 FTSE Global All Cap Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/8617/ftse-global-all-cap-index-fund-gbp-acc
 FTSE Japan UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9674/ftse-japan-ucits-etf-usd-accumulating
@@ -47,33 +24,12 @@ FTSE North America UCITS ETF#https://www.vanguard.co.uk/professional/product/etf
 FTSE U.K. All Share Index Unit Trust#https://www.vanguard.co.uk/professional/product/fund/equity/9156/ftse-uk-all-share-index-unit-trust-gbp-acc
 FTSE U.K. Equity Income Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9206/ftse-uk-equity-income-index-fund-gbp-acc
 Germany All Cap UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9688/germany-all-cap-ucits-etf-eur-distributing
-Global Aggregate Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9750/global-aggregate-bond-ucits-etf-chf-hedged-accumulating
-Global Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9138/global-bond-index-fund-chf-hedged-acc
-Global Corporate Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9460/global-corporate-bond-index-fund-chf-hedged-acc
-Global Credit Bond Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9547/global-credit-bond-fund-institutional-aud-hedged-acc
 Global Emerging Markets Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9413/global-emerging-markets-fund-gbp-acc
 Global Equity Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9408/global-equity-fund-gbp-acc
 Global Equity Income Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9411/global-equity-income-fund-gbp-acc
-Global Short-Term Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9258/global-short-term-bond-index-fund-chf-hedged-acc
-Global Short-Term Corporate Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9544/global-short-term-corporate-bond-index-fund-eur-hedged-acc
 Global Small-Cap Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9159/global-small-cap-index-fund-eur-acc
 Global Sustainable Equity Fund#https://www.vanguard.co.uk/professional/product/fund/equity/E014/global-sustainable-equity-fund-gbp-acc
-Japan Government Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9463/japan-government-bond-index-fund-eur-hedged-acc
 Japan Stock Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9113/japan-stock-index-fund-eur-acc
 Pacific ex-Japan Stock Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9876/pacific-ex-japan-stock-index-fund-aud-acc
-S&P 500 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating
 SRI European Stock Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9163/sri-european-stock-fund-eur-acc
-Sterling Short-Term Money Market Fund#https://www.vanguard.co.uk/professional/product/fund/money-market/9974/sterling-short-term-money-market-fund-gbp-inc
-U.K. Gilt UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9599/uk-gilt-ucits-etf-gbp-accumulating
-U.K. Government Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9462/uk-government-bond-index-fund-eur-hedged-acc
-U.K. Inflation-Linked Gilt Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9226/uk-inflation-linked-gilt-index-fund-gbp-acc
-U.K. Investment Grade Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9125/uk-investment-grade-bond-index-fund-gbp-acc
-U.K. Long Duration Gilt Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9222/uk-long-duration-gilt-index-fund-gbp-acc
-U.K. Short-Term Investment Grade Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9247/uk-short-term-investment-grade-bond-index-fund-gbp-acc
 U.S. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9218/us-equity-index-fund-gbp-acc
-U.S. Government Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/E031/us-government-bond-index-fund-chf-hedged-acc
-U.S. Investment Grade Credit Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9972/us-investment-grade-credit-index-fund-eur-acc
-USD Corporate 1-3 Year Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9592/usd-corporate-1-3-year-bond-ucits-etf-usd-accumulating
-USD Corporate Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9594/usd-corporate-bond-ucits-etf-usd-accumulating
-USD Emerging Markets Government Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9596/usd-emerging-markets-government-bond-ucits-etf-usd-accumulating
-USD Treasury Bond UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/bond/9598/usd-treasury-bond-ucits-etf-usd-accumulating

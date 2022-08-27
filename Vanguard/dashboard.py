@@ -55,7 +55,7 @@ controls = html.Div(
 		dcc.Dropdown(
 			id='dropdown',
 			options=dropdown_categories,
-			value=[dropdown_categories[0]['value']],  # default value
+			value=[dropdown_categories[1]['value']],  # default value
 			multi=True
 		),
 		html.Br(),
@@ -63,6 +63,12 @@ controls = html.Div(
 			id='submit_button',
 			n_clicks=0,
 			children='Plot fund',
+		),
+		html.Br(),
+		html.Button(
+			id='my_funds_button',
+			n_clicks=0,
+			children='My funds',
 		),
 	]
 )
@@ -181,31 +187,31 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 	if not dropdown_value:
 		raise PreventUpdate
 	
-	if (len(list(dropdown_value))) == 1:
-		df = fund_download(dropdown_value)
+	data = pd.DataFrame(columns=['Date'])
 
-		df_bars = df.groupby(df.Date.dt.year).mean().reset_index()
+	for val in dropdown_value:
 
-		x = df_bars[df_bars.columns[0]].values
-		y = df_bars[df_bars.columns[1]].values
+		df = fund_download(val)
+		df.columns = ['Date', val]
 
-		x = np.insert(x, 0, x[0]-1)
-		y = np.insert(y, 0, 100)
+		data = pd.merge(data, df, how='outer', on='Date')
 
-		fig = px.bar(df_bars, x=x, y = y)
+	df_bars = data.groupby(data.Date.dt.year).mean().reset_index()
+	df_bars = df_bars.melt(id_vars=['Date']).dropna()
 
-		fig.add_hline(y=df[df.columns[1]].mean(), line_dash="dot",
-							annotation_text=f"Mean: {round(df[df.columns[1]].mean(), 2)}", 
-							annotation_position="bottom left",
-							annotation_font_size=20,
-							annotation_font_color="black")
-		
-		fig.update_xaxes(
-			ticklabelstep=1,
-			dtick="M1",
-			tickformat="%b\n%Y")
-		return fig
-	return
+	fig = px.bar(df_bars, x="Date", y="value", facet_row="variable", facet_col_wrap=2)
+
+	# fig.add_hline(y=data[data.columns[1]].mean(), line_dash="dot",
+	# 					annotation_text=f"Mean: {round(data[data.columns[1]].mean(), 2)}", 
+	# 					annotation_position="bottom left",
+	# 					annotation_font_size=16,
+	# 					annotation_font_color="black")
+	
+	fig.update_xaxes(
+		ticklabelstep=1,
+		dtick="M1",
+		tickformat="%b\n%Y")
+	return fig
 
 if __name__ == '__main__':
 	app.run_server(port='8085')

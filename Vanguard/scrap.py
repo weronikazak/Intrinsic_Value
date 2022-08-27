@@ -17,6 +17,8 @@ import shutil
 
 import pandas as pd
 
+from currency_converter import CurrencyConverter
+
 today = str(datetime.now().date())
 
 DOWNLOAD_FOLDER = f'./files/{today}/'
@@ -75,8 +77,9 @@ def fund_download(new_fund):
 
     print('Plotting dataframe...')
     df = load_fund_df(new_fund)
-    df = clean_df(df)
     df = df.drop(df.iloc[:, 2:], axis=1)
+    df = convert_currency(df)
+
     return df
 
 
@@ -126,16 +129,45 @@ def scrap_fund(fund_name, link):
         driver.close()
         print(f'Fund {fund_name} downloaded.')
         return False
-    
 
-# Clean dataframe
-def clean_df(df):
+
+def convert_currency(df):
+    c = CurrencyConverter()
+    col = df.columns[1]
+
     df['Date'] = pd.to_datetime(df['Date'])
-    df[df.columns[1]] = df[df.columns[1]].str.replace('£', '')
-    df[df.columns[1]] = df[df.columns[1]].str.replace('CHF', '')
-    df[df.columns[1]] = df[df.columns[1]].str.replace('US', '')
-    df[df.columns[1]] = df[df.columns[1]].str.replace('€', '')
-    df[df.columns[1]] = df[df.columns[1]].str.replace('$', '')
-    df[df.columns[1]] = df[df.columns[1]].str.replace('A', '')
-    df[df.columns[1]] = df[df.columns[1]].astype(float)
+    
+    if '$' in df[col].iloc[2] or 'USD' in df[col].iloc[2] or 'US' in df[col].iloc[2]:
+        print('USD')
+
+        df[col] = df[col].str.replace('$', '')
+        df[col] = df[col].str.replace('US', '')
+        df[col] = df[col].str.replace('USD', '')
+        df[col] = df[col].astype(float)
+        df[col] = df[col].apply(lambda x: round(c.convert(x, 'USD', 'GBP'), 2))
+    elif 'CHF' in df[col].iloc[2]:
+        print('CHF')
+
+        df[col] = df[col].str.replace('CHF', '')
+        df[col] = df[col].astype(float)
+        df[col] = df[col].apply(lambda x: round(c.convert(x, 'CHF', 'GBP'), 2))
+        
+    elif 'A' in df[col].iloc[2] or 'AUD' in df[col].iloc[2]:
+        print('AUD')
+        df[col] = df[col].str.replace('A', '')
+        df[col] = df[col].str.replace('AUD', '')
+        df[col] = df[col].astype(float)
+        df[col] = df[col].apply(lambda x: round(c.convert(x, 'AUD', 'GBP'), 2))
+
+    elif '€' in df[col].iloc[2] or 'EUR' in df[col].iloc[2]:
+        print('EUR')
+        df[col] = df[col].str.replace('EUR', '')
+        df[col] = df[col].str.replace('€', '')
+        df[col] = df[col].astype(float)
+        df[col] = df[col].apply(lambda x: round(c.convert(x, 'EUR', 'GBP'), 2))
+    else:
+        df[col] = df[col].str.replace('£', '')
+        df[col] = df[col].str.replace('GBP', '')
+        df[col] = df[col].astype(float)
+    
     return df
