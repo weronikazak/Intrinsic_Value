@@ -76,7 +76,7 @@ def fund_download(new_fund):
     print('Plotting dataframe...')
     df = load_fund_df(new_fund)
     df = clean_df(df)
-    
+    df = df.drop(df.iloc[:, 2:], axis=1)
     return df
 
 
@@ -133,6 +133,7 @@ def clean_df(df):
     df['Date'] = pd.to_datetime(df['Date'])
     df[df.columns[1]] = df[df.columns[1]].str.replace('£', '')
     df[df.columns[1]] = df[df.columns[1]].str.replace('CHF', '')
+    df[df.columns[1]] = df[df.columns[1]].str.replace('US', '')
     df[df.columns[1]] = df[df.columns[1]].str.replace('€', '')
     df[df.columns[1]] = df[df.columns[1]].str.replace('$', '')
     df[df.columns[1]] = df[df.columns[1]].str.replace('A', '')

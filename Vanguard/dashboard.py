@@ -131,12 +131,6 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 		data = pd.DataFrame(columns=['Date'])
 		
 		for val in dropdown_value:
-			print('----------------------')
-			print('----------------------')
-			print(val)
-			print('----------------------')
-			print('----------------------')
-
 			df = fund_download(val)
 			df.columns = ['Date', val]
 			data = pd.merge(data, df, how='outer', on='Date')
@@ -150,6 +144,7 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 					dict(count=6, label="6m", step="month", stepmode="backward"),
 					dict(count=1, label="YTD", step="year", stepmode="todate"),
 					dict(count=1, label="1y", step="year", stepmode="backward"),
+					dict(count=5, label="5y", step="year", stepmode="backward"),
 					dict(step="all")
 				])
 			)
@@ -167,11 +162,6 @@ def update_area_graph_timeseries(n_clicks, dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
 
 	for val in dropdown_value:
-		print('----------------------')
-		print('----------------------')
-		print(val)
-		print('----------------------')
-		print('----------------------')
 
 		df = fund_download(val)
 		df.columns = ['Date', val]
@@ -204,12 +194,10 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 
 		fig = px.bar(df_bars, x=x, y = y)
 
-		# fig.update_traces(texttemplate='%{text:.2f}', textposition='inside')
-
 		fig.add_hline(y=df[df.columns[1]].mean(), line_dash="dot",
 							annotation_text=f"Mean: {round(df[df.columns[1]].mean(), 2)}", 
 							annotation_position="bottom left",
-							annotation_font_size=12,
+							annotation_font_size=20,
 							annotation_font_color="black")
 		
 		fig.update_xaxes(
