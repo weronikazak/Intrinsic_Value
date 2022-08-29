@@ -1,22 +1,23 @@
 S&P 500 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9694/sp-500-ucits-etf-usd-accumulating
+U.S. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9218/us-equity-index-fund-gbp-acc
 FTSE Developed World ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9210/ftse-developed-world-ex-uk-equity-index-fund-gbp-acc
-FTSE Developed World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9675/ftse-developed-world-ucits-etf-usd-accumulating
-FTSE Developed Europe ex UK UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9682/ftse-developed-europe-ex-uk-ucits-etf-eur-accumulating
-FTSE Developed Europe ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9214/ftse-developed-europe-ex-uk-equity-index-fund-gbp-acc
-Global Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9138/global-bond-index-fund-chf-hedged-acc
 FTSE All-World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9679/ftse-all-world-ucits-etf-usd-accumulating
+FTSE Developed Europe ex UK UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9682/ftse-developed-europe-ex-uk-ucits-etf-eur-accumulating
+Global Bond Index Fund#https://www.vanguard.co.uk/professional/product/fund/bond/9138/global-bond-index-fund-chf-hedged-acc
 Active U.K. Equity Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9546/active-uk-equity-fund-gbp-acc
 Emerging Markets Stock Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9229/emerging-markets-stock-index-fund-eur-acc
 ESG Developed World All Cap Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9526/esg-developed-world-all-cap-equity-index-fund-uk-gbp-acc
 ESG Developed World All Cap Equity Index Fund (UK)#https://www.vanguard.co.uk/professional/product/fund/equity/9526/esg-developed-world-all-cap-equity-index-fund-uk-gbp-acc
 ESG Emerging Markets All Cap Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/E028/esg-emerging-markets-all-cap-equity-index-fund-chf-acc
 ESG Global All Cap UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9470/esg-global-all-cap-ucits-etf-usd-accumulating
+FTSE Developed World UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9675/ftse-developed-world-ucits-etf-usd-accumulating
 FTSE 100 Index Unit Trust#https://www.vanguard.co.uk/professional/product/fund/equity/8619/ftse-100-index-unit-trust-gbp-acc
 FTSE 100 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9580/ftse-100-ucits-etf-gbp-accumulating
 FTSE 250 UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9581/ftse-250-ucits-etf-gbp-accumulating
 FTSE All-World High Dividend Yield UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9677/ftse-all-world-high-dividend-yield-ucits-etf-usd-accumulating
 FTSE Developed Asia Pacific ex Japan UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9676/ftse-developed-asia-pacific-ex-japan-ucits-etf-usd-accumulating
 FTSE Developed Europe UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9681/ftse-developed-europe-ucits-etf-eur-accumulating
+FTSE Developed Europe ex-U.K. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9214/ftse-developed-europe-ex-uk-equity-index-fund-gbp-acc
 FTSE Emerging Markets UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9678/ftse-emerging-markets-ucits-etf-usd-accumulating
 FTSE Global All Cap Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/8617/ftse-global-all-cap-index-fund-gbp-acc
 FTSE Japan UCITS ETF#https://www.vanguard.co.uk/professional/product/etf/equity/9674/ftse-japan-ucits-etf-usd-accumulating
@@ -32,4 +33,3 @@ Global Sustainable Equity Fund#https://www.vanguard.co.uk/professional/product/f
 Japan Stock Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9113/japan-stock-index-fund-eur-acc
 Pacific ex-Japan Stock Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9876/pacific-ex-japan-stock-index-fund-aud-acc
 SRI European Stock Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9163/sri-european-stock-fund-eur-acc
-U.S. Equity Index Fund#https://www.vanguard.co.uk/professional/product/fund/equity/9218/us-equity-index-fund-gbp-acc

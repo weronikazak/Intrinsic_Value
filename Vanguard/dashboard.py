@@ -41,7 +41,7 @@ TEXT_STYLE = {
 
 
 GRAPH_STYLE = {
-	'height': 600,
+	# 'height': 600,
 	'display':'block'
 }
 
@@ -55,7 +55,7 @@ controls = html.Div(
 		dcc.Dropdown(
 			id='dropdown',
 			options=dropdown_categories,
-			value=[dropdown_categories[1]['value']],  # default value
+			value=[dropdown_categories[0]['value']],  # default value
 			multi=True
 		),
 		html.Br(),
@@ -107,12 +107,6 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 	if not dropdown_value:
 		raise PreventUpdate
 	fig = 0
-	print('----------------------')
-	print('----------------------')
-
-	print(dropdown_value)
-	print('----------------------')
-	print('----------------------')
 
 	if len(list(dropdown_value)) == 1:
 		df = fund_download(dropdown_value)
@@ -178,6 +172,20 @@ def update_area_graph_timeseries(n_clicks, dropdown_value):
 	fig = px.area(data, facet_col='funds', facet_col_wrap=2)
 
 	return fig
+
+@app.callback(
+	Output('dropdown', 'value'),
+	Input('my_funds_button', 'n_clicks'))
+def update_dropdown(n_clicks):
+	my_funds = [
+		'S&P 500 UCITS ETF', 
+		'U.S. Equity Index Fund',
+		'FTSE Developed World ex-U.K. Equity Index Fund',
+		'FTSE All-World UCITS ETF',
+		'Global Bond Index Fund'
+	]
+
+	return my_funds 
 
 @app.callback(
 	Output('graph_bars', 'figure'),
