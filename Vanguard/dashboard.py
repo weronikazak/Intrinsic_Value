@@ -9,6 +9,7 @@ import plotly.express as px
 from scrap import *
 
 import numpy as np
+import itertools
 
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
@@ -205,20 +206,31 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 		data = pd.merge(data, df, how='outer', on='Date')
 
 	df_bars = data.groupby(data.Date.dt.year).mean().reset_index()
-	df_bars = df_bars.melt(id_vars=['Date']).dropna()
+	df_bars_m = df_bars.melt(id_vars=['Date']).dropna()
 
-	fig = px.bar(df_bars, x="Date", y="value", facet_row="variable", facet_col_wrap=2)
+	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2)
+	
+	for i, ticker in enumerate(df_bars.columns[1:]):
+		means = df_bars[ticker].mean()
+		row = col = 0
+		if i > 0:
+			row = int(i / 2)
+			col = i % 2
+		print(i, row, col, ticker, means)
 
-	# fig.add_hline(y=data[data.columns[1]].mean(), line_dash="dot",
-	# 					annotation_text=f"Mean: {round(data[data.columns[1]].mean(), 2)}", 
+		fig.add_hline(y=means, line_dash="dot", row=row, col=col,
+						annotation_text=f"Mean: {round(means, 2)}", 
+						annotation_position="bottom left",
+						annotation_font_size=12,
+						annotation_font_color="black")
+	
+	# fig.add_hline(y=120, line_dash="dot",
+	# 					annotation_text=f"Mean: 120", 
 	# 					annotation_position="bottom left",
 	# 					annotation_font_size=16,
 	# 					annotation_font_color="black")
 	
-	fig.update_xaxes(
-		ticklabelstep=1,
-		dtick="M1",
-		tickformat="%b\n%Y")
+	fig.update_xaxes(ticklabelstep=1, dtick="M1", tickformat="%b\n%Y")
 	return fig
 
 if __name__ == '__main__':

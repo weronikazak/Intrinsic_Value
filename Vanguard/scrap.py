@@ -138,33 +138,29 @@ def convert_currency(df):
     df['Date'] = pd.to_datetime(df['Date'])
     
     if '$' in df[col].iloc[2] or 'USD' in df[col].iloc[2] or 'US' in df[col].iloc[2]:
-        print('USD')
-
         df[col] = df[col].str.replace('$', '')
         df[col] = df[col].str.replace('US', '')
         df[col] = df[col].str.replace('USD', '')
         df[col] = df[col].astype(float)
         df[col] = df[col].apply(lambda x: round(c.convert(x, 'USD', 'GBP'), 2))
-    elif 'CHF' in df[col].iloc[2]:
-        print('CHF')
 
+    elif 'CHF' in df[col].iloc[2]:
         df[col] = df[col].str.replace('CHF', '')
         df[col] = df[col].astype(float)
         df[col] = df[col].apply(lambda x: round(c.convert(x, 'CHF', 'GBP'), 2))
         
     elif 'A' in df[col].iloc[2] or 'AUD' in df[col].iloc[2]:
-        print('AUD')
         df[col] = df[col].str.replace('A', '')
         df[col] = df[col].str.replace('AUD', '')
         df[col] = df[col].astype(float)
         df[col] = df[col].apply(lambda x: round(c.convert(x, 'AUD', 'GBP'), 2))
 
     elif '€' in df[col].iloc[2] or 'EUR' in df[col].iloc[2]:
-        print('EUR')
         df[col] = df[col].str.replace('EUR', '')
         df[col] = df[col].str.replace('€', '')
         df[col] = df[col].astype(float)
         df[col] = df[col].apply(lambda x: round(c.convert(x, 'EUR', 'GBP'), 2))
+
     else:
         df[col] = df[col].str.replace('£', '')
         df[col] = df[col].str.replace('GBP', '')
