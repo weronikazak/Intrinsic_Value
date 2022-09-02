@@ -41,8 +41,13 @@ TEXT_STYLE = {
 }
 
 
-GRAPH_STYLE = {
-	# 'height': 600,
+GRAPH_STYLE_1 = {
+	'height': 600,
+	'display':'block'
+}
+
+GRAPH_STYLE_2 = {
+	'height': int(),
 	'display':'block'
 }
 
@@ -99,6 +104,13 @@ app = dash.Dash(suppress_callback_exceptions=True,
 				"assets/style.css"])
 app.layout = html.Div([sidebar, content])
 
+@app.callback(
+    [Output('graph_time_multi', 'figure'), 
+	Output('graph_bars', 'figure')],
+    Input('dropdown', 'value')
+)
+def update_output(value):
+    return f'You have selected {value}'
 
 @app.callback(
 	Output('graph_timeseries', 'figure'),
@@ -206,6 +218,14 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 		data = pd.merge(data, df, how='outer', on='Date')
 
 	df_bars = data.groupby(data.Date.dt.year).mean().reset_index()
+
+	for future, past in zip(df_bars.iloc[1:].iterrows(), df_bars.iterrows()):
+		i, row_f = future
+		j, row_p = past
+		for col in df_bars.columns[1:]:
+			profit = round(100*(row_f[col] - row_p[col])/ row_p[col], 2)
+			df_bars.loc[j, col] = profit
+	df_bars = df_bars.iloc[:-1]
 	df_bars_m = df_bars.melt(id_vars=['Date']).dropna()
 
 	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2)
