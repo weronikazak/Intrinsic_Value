@@ -41,13 +41,13 @@ TEXT_STYLE = {
 }
 
 
-GRAPH_STYLE_1 = {
+GRAPH_STYLE = {
 	'height': 600,
 	'display':'block'
 }
 
 GRAPH_STYLE_2 = {
-	'height': int(),
+	# 'height': int(),
 	'display':'block'
 }
 
@@ -104,13 +104,13 @@ app = dash.Dash(suppress_callback_exceptions=True,
 				"assets/style.css"])
 app.layout = html.Div([sidebar, content])
 
-@app.callback(
-    [Output('graph_time_multi', 'figure'), 
-	Output('graph_bars', 'figure')],
-    Input('dropdown', 'value')
-)
-def update_output(value):
-    return f'You have selected {value}'
+# @app.callback(
+#     [Output('graph_time_multi', 'figure'), 
+# 	Output('graph_bars', 'figure')],
+#     Input('dropdown', 'value')
+# )
+# def update_output(value):
+#     return 
 
 @app.callback(
 	Output('graph_timeseries', 'figure'),
@@ -182,7 +182,8 @@ def update_area_graph_timeseries(n_clicks, dropdown_value):
 
 	data.columns.name = 'funds'
 	data = data.set_index('Date')
-	fig = px.area(data, facet_col='funds', facet_col_wrap=2)
+	fig = px.area(data, facet_col='funds', facet_col_wrap=2, 
+	height=int((len(data.columns)-1)/2)*500)
 
 	return fig
 
@@ -227,30 +228,34 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 			df_bars.loc[j, col] = profit
 	df_bars = df_bars.iloc[:-1]
 	df_bars_m = df_bars.melt(id_vars=['Date']).dropna()
-
-	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2)
 	
-	for i, ticker in enumerate(df_bars.columns[1:]):
-		means = df_bars[ticker].mean()
-		row = col = 0
-		if i > 0:
-			row = int(i / 2)
-			col = i % 2
-		print(i, row, col, ticker, means)
+	df_bars_m['color'] = 'blue'
+	df_bars_m.loc[df_bars_m['value'] < 0, 'color'] = 'red'
 
-		fig.add_hline(y=means, line_dash="dot", row=row, col=col,
+	num_rows = int(len(df_bars.columns)/2)
+
+	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2,
+				color='color', height=num_rows*500)
+	
+	rows = list(reversed(range(1, num_rows+1)))
+	row_col = list(itertools.product(rows, [1, 2]))
+
+	for ticker, idx in zip(df_bars.columns[1:], row_col):
+		means = df_bars[ticker].mean()
+
+		fig.add_hline(y=means, line_dash="dot", row=idx[0], col=idx[1],
 						annotation_text=f"Mean: {round(means, 2)}", 
-						annotation_position="bottom left",
+						annotation_position="top left",
 						annotation_font_size=12,
 						annotation_font_color="black")
+
 	
-	# fig.add_hline(y=120, line_dash="dot",
-	# 					annotation_text=f"Mean: 120", 
-	# 					annotation_position="bottom left",
-	# 					annotation_font_size=16,
-	# 					annotation_font_color="black")
+		fig.update_xaxes(ticklabelstep=1, dtick="M1", 
+						tickformat="%b\n%Y",
+						row=idx[0], col=idx[1])
 	
-	fig.update_xaxes(ticklabelstep=1, dtick="M1", tickformat="%b\n%Y")
+	fig.update_traces(textposition='inside')
+	
 	return fig
 
 if __name__ == '__main__':
