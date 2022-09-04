@@ -137,7 +137,7 @@ def convert_currency(df):
 
     df['Date'] = pd.to_datetime(df['Date'])
     
-    if '$' in df[col].iloc[2] or 'USD' in df[col].iloc[2] or 'US' in df[col].iloc[2]:
+    if 'USD' in df[col].iloc[2] or 'US' in df[col].iloc[2]:
         df[col] = df[col].str.replace('$', '')
         df[col] = df[col].str.replace('US', '')
         df[col] = df[col].str.replace('USD', '')
@@ -152,6 +152,7 @@ def convert_currency(df):
     elif 'A' in df[col].iloc[2] or 'AUD' in df[col].iloc[2]:
         df[col] = df[col].str.replace('A', '')
         df[col] = df[col].str.replace('AUD', '')
+        df[col] = df[col].str.replace('$', '')
         df[col] = df[col].astype(float)
         df[col] = df[col].apply(lambda x: round(c.convert(x, 'AUD', 'GBP'), 2))
 

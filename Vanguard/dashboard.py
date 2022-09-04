@@ -11,6 +11,8 @@ from scrap import *
 import numpy as np
 import itertools
 
+PLOTTED_DF = {}
+
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
 	"position": "fixed",
@@ -88,6 +90,7 @@ content = html.Div(
 		dcc.Graph(id='graph_timeseries', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_time_multi', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_bars', style=GRAPH_STYLE),
+		dcc.Graph(id='graph_corr', style=GRAPH_STYLE),
 	],
 	style=CONTENT_STYLE
 )
@@ -97,17 +100,16 @@ app = dash.Dash(suppress_callback_exceptions=True,
 				"assets/style.css"])
 app.layout = html.Div([sidebar, content])
 
-@app.callback(
-	Output('graph_timeseries', 'figure'),
-	[Input('submit_button', 'n_clicks'),
-	Input('dropdown', 'value')])
-def update_line_graph_timeseries(n_clicks, dropdown_value):
-	if not dropdown_value:
-		raise PreventUpdate
+def update_line_graph_timeseries(dropdown_value):
 	fig = 0
 
 	if len(list(dropdown_value)) == 1:
-		df = fund_download(dropdown_value)
+		if val not in PLOTTED_DF.keys():
+			df = fund_download(dropdown_value)
+			df.columns = ['Date', val]
+			PLOTTED_DF[val] = df
+		else:
+			df = PLOTTED_DF[dropdown_value]
 
 		x = df[df.columns[0]].values
 		y = df[df.columns[1]].values
@@ -129,8 +131,12 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 		data = pd.DataFrame(columns=['Date'])
 		
 		for val in dropdown_value:
-			df = fund_download(val)
-			df.columns = ['Date', val]
+			if val not in PLOTTED_DF.keys():
+				df = fund_download(val)
+				df.columns = ['Date', val]
+				PLOTTED_DF[val] = df
+			else:
+				df = PLOTTED_DF[val]
 			data = pd.merge(data, df, how='outer', on='Date')
 
 		fig = px.line(data, x='Date', y = data.columns, height=600)
@@ -149,22 +155,19 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 			ticklabelstep=12, dtick="M1", 
 			tickformat="%Y", showticklabels=True
 		)
-		
+
 	return fig
 
-@app.callback(
-	Output('graph_time_multi', 'figure'),
-	[Input('submit_button', 'n_clicks'),
-	Input('dropdown', 'value')])
-def update_area_graph_timeseries(n_clicks, dropdown_value):
-	if not dropdown_value:
-		raise PreventUpdate
-	
+def update_area_graph_timeseries(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
 
 	for val in dropdown_value:
-		df = fund_download(val)
-		df.columns = ['Date', val]
+		if val not in PLOTTED_DF.keys():
+			df = fund_download(val)
+			df.columns = ['Date', val]
+			PLOTTED_DF[val] = df
+		else:
+			df = PLOTTED_DF[val]
 		data = pd.merge(data, df, how='outer', on='Date')
 
 	data.columns.name = 'funds'
@@ -196,17 +199,32 @@ def update_dropdown(n_clicks):
 	return my_funds 
 
 @app.callback(
+	[Output('graph_timeseries', 'figure'),
+	Output('graph_time_multi', 'figure'),
 	Output('graph_bars', 'figure'),
+	Output('graph_corr', 'figure')],
 	[Input('submit_button', 'n_clicks'),
 	Input('dropdown', 'value')])
-def update_bar_graph_timeseries(n_clicks, dropdown_value):
+def update_graphs(n_click, dropdown_value):
 	if not dropdown_value:
 		raise PreventUpdate
-	
+
+	f1 = update_line_graph_timeseries(dropdown_value)
+	f2 = update_area_graph_timeseries(dropdown_value)
+	f3 = update_bar_graph_timeseries(dropdown_value)
+	f4 = update_corr_graph(dropdown_value)
+
+	return f1, f2, f3, f4
+
+def update_bar_graph_timeseries(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
 	for val in dropdown_value:
-		df = fund_download(val)
-		df.columns = ['Date', val]
+		if val not in PLOTTED_DF.keys():
+			df = fund_download(val)
+			df.columns = ['Date', val]
+			PLOTTED_DF[val] = df
+		else:
+			df = PLOTTED_DF[val]
 
 		data = pd.merge(data, df, how='outer', on='Date')
 
@@ -255,6 +273,36 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 						cliponaxis=False)
 	
 	return fig
+
+
+def update_corr_graph(dropdown_value):
+	data = pd.DataFrame(columns=['Date'])
+	for val in dropdown_value:
+		if val not in PLOTTED_DF.keys():
+			df = fund_download(val)
+			df.columns = ['Date', val]
+			PLOTTED_DF[val] = df
+		else:
+			df = PLOTTED_DF[val]
+		data = pd.merge(data, df, how='outer', on='Date')
+
+	df_bars = data.groupby(data.Date.dt.year).mean().reset_index()
+
+	for future, past in zip(df_bars.iloc[1:].iterrows(), df_bars.iterrows()):
+		i, row_f = future
+		j, row_p = past
+		for col in df_bars.columns[1:]:
+			profit = round(100*(row_f[col] - row_p[col])/ row_p[col], 2)
+			df_bars.loc[j, col] = profit
+	df_bars = df_bars.iloc[:-1]
+	num_rows = len(df_bars.columns)
+	print(num_rows)
+	fig = px.imshow(df_bars.iloc[:, 1:].corr(), text_auto=True, aspect="auto",
+					height=num_rows*80)
+	fig.update_xaxes(side="top")
+	# fig.update_layout(showlegend=False)
+	return fig
+
 
 if __name__ == '__main__':
 	app.run_server(port='8085')
