@@ -42,12 +42,6 @@ TEXT_STYLE = {
 
 
 GRAPH_STYLE = {
-	'height': 600,
-	'display':'block'
-}
-
-GRAPH_STYLE_2 = {
-	# 'height': int(),
 	'display':'block'
 }
 
@@ -55,9 +49,6 @@ dropdown_categories = [{'label': val, 'value': val} for val in list(get_fund_lis
 
 controls = html.Div(
 	[
-		html.P('Dropdown', style={
-			'textAlign': 'center'
-		}),
 		dcc.Dropdown(
 			id='dropdown',
 			options=dropdown_categories,
@@ -76,7 +67,9 @@ controls = html.Div(
 			n_clicks=0,
 			children='My funds',
 		),
-	]
+	], style={
+		'padding':'0 10px'
+	}
 )
 
 sidebar = html.Div(
@@ -104,14 +97,6 @@ app = dash.Dash(suppress_callback_exceptions=True,
 				"assets/style.css"])
 app.layout = html.Div([sidebar, content])
 
-# @app.callback(
-#     [Output('graph_time_multi', 'figure'), 
-# 	Output('graph_bars', 'figure')],
-#     Input('dropdown', 'value')
-# )
-# def update_output(value):
-#     return 
-
 @app.callback(
 	Output('graph_timeseries', 'figure'),
 	[Input('submit_button', 'n_clicks'),
@@ -127,7 +112,7 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 		x = df[df.columns[0]].values
 		y = df[df.columns[1]].values
 
-		fig = px.line(df, x=x, y = y)	
+		fig = px.line(df, x=x, y = y, height=600)	
 		fig.update_xaxes(
 			rangeslider_visible=True,
 			rangeselector=dict(
@@ -148,7 +133,7 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 			df.columns = ['Date', val]
 			data = pd.merge(data, df, how='outer', on='Date')
 
-		fig = px.line(data, x='Date', y = data.columns)
+		fig = px.line(data, x='Date', y = data.columns, height=600)
 		fig.update_xaxes(
 			# rangeslider_visible=True,
 			rangeselector=dict(
@@ -160,8 +145,11 @@ def update_line_graph_timeseries(n_clicks, dropdown_value):
 					dict(count=5, label="5y", step="year", stepmode="backward"),
 					dict(step="all")
 				])
-			)
+			),
+			ticklabelstep=12, dtick="M1", 
+			tickformat="%Y", showticklabels=True
 		)
+		
 	return fig
 
 @app.callback(
@@ -175,7 +163,6 @@ def update_area_graph_timeseries(n_clicks, dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
 
 	for val in dropdown_value:
-
 		df = fund_download(val)
 		df.columns = ['Date', val]
 		data = pd.merge(data, df, how='outer', on='Date')
@@ -183,7 +170,14 @@ def update_area_graph_timeseries(n_clicks, dropdown_value):
 	data.columns.name = 'funds'
 	data = data.set_index('Date')
 	fig = px.area(data, facet_col='funds', facet_col_wrap=2, 
-	height=int((len(data.columns)-1)/2)*500)
+				height=int((len(data.columns)-1)/2)*500)
+
+	fig.update_yaxes(showticklabels=True)
+	fig.update_xaxes(ticklabelstep=12, dtick="M1", 
+					tickformat="%Y",
+					matches=None, showticklabels=True)
+	
+	fig.update_layout(showlegend=False)
 
 	return fig
 
@@ -210,9 +204,7 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 		raise PreventUpdate
 	
 	data = pd.DataFrame(columns=['Date'])
-
 	for val in dropdown_value:
-
 		df = fund_download(val)
 		df.columns = ['Date', val]
 
@@ -235,7 +227,7 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 	num_rows = int(len(df_bars.columns)/2)
 
 	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2,
-				color='color', height=num_rows*500)
+				color='color', text_auto=True, height=num_rows*500)
 	
 	rows = list(reversed(range(1, num_rows+1)))
 	row_col = list(itertools.product(rows, [1, 2]))
@@ -243,18 +235,24 @@ def update_bar_graph_timeseries(n_clicks, dropdown_value):
 	for ticker, idx in zip(df_bars.columns[1:], row_col):
 		means = df_bars[ticker].mean()
 
-		fig.add_hline(y=means, line_dash="dot", row=idx[0], col=idx[1],
+		fig.add_hline(y=means, line_dash="dot",
 						annotation_text=f"Mean: {round(means, 2)}", 
 						annotation_position="top left",
 						annotation_font_size=12,
-						annotation_font_color="black")
-
-	
-		fig.update_xaxes(ticklabelstep=1, dtick="M1", 
-						tickformat="%b\n%Y",
+						annotation_font_color="black",
 						row=idx[0], col=idx[1])
+
+	fig.update_yaxes(
+					# matches=None, 
+					showticklabels=True)
+	fig.update_xaxes(ticklabelstep=1, dtick="M1", 
+					tickformat="%b\n%Y",
+					matches=None, showticklabels=True)
 	
-	fig.update_traces(textposition='inside')
+	fig.update_traces(textfont_size=12, 
+						textangle=0, 
+						textposition="outside", 
+						cliponaxis=False)
 	
 	return fig
 
