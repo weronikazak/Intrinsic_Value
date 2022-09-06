@@ -12,6 +12,7 @@ import numpy as np
 import itertools
 
 PLOTTED_DF = {}
+TEST_MODE = True
 
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
@@ -22,6 +23,7 @@ SIDEBAR_STYLE = {
 	'width': '20vw',
 	'background-color': '#f8f9fa',
 	'float':'left',
+	'overflowY':'scroll'
 }
 
 # the style arguments for the main content page.
@@ -105,7 +107,7 @@ def update_line_graph_timeseries(dropdown_value):
 
 	if len(list(dropdown_value)) == 1:
 		if val not in PLOTTED_DF.keys():
-			df = fund_download(dropdown_value)
+			df = fund_download(dropdown_value, TEST_MODE)
 			df.columns = ['Date', val]
 			PLOTTED_DF[val] = df
 		else:
@@ -132,7 +134,7 @@ def update_line_graph_timeseries(dropdown_value):
 		
 		for val in dropdown_value:
 			if val not in PLOTTED_DF.keys():
-				df = fund_download(val)
+				df = fund_download(val, TEST_MODE)
 				df.columns = ['Date', val]
 				PLOTTED_DF[val] = df
 			else:
@@ -163,7 +165,7 @@ def update_area_graph_timeseries(dropdown_value):
 
 	for val in dropdown_value:
 		if val not in PLOTTED_DF.keys():
-			df = fund_download(val)
+			df = fund_download(val, TEST_MODE)
 			df.columns = ['Date', val]
 			PLOTTED_DF[val] = df
 		else:
@@ -220,7 +222,7 @@ def update_bar_graph_timeseries(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
 	for val in dropdown_value:
 		if val not in PLOTTED_DF.keys():
-			df = fund_download(val)
+			df = fund_download(val, TEST_MODE)
 			df.columns = ['Date', val]
 			PLOTTED_DF[val] = df
 		else:
@@ -279,7 +281,7 @@ def update_corr_graph(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
 	for val in dropdown_value:
 		if val not in PLOTTED_DF.keys():
-			df = fund_download(val)
+			df = fund_download(val, TEST_MODE)
 			df.columns = ['Date', val]
 			PLOTTED_DF[val] = df
 		else:

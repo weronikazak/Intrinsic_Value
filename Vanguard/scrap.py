@@ -22,6 +22,7 @@ from currency_converter import CurrencyConverter
 today = str(datetime.now().date())
 
 DOWNLOAD_FOLDER = f'./files/{today}/'
+TEST_FOLDER = './files/test/'
 CHROMEDRIVER_URL = "c:\\chromedriver.exe"
 WINDOW_SIZE = "1920,1080"
 
@@ -34,12 +35,16 @@ def remove_folders():
 
 
 # Check if data has been downloaded
-def check_if_downloaded(fund_name):
-    if not os.path.exists(DOWNLOAD_FOLDER):
+def check_if_downloaded(fund_name, testing):
+    URL = DOWNLOAD_FOLDER
+    if testing:
+        URL = TEST_FOLDER
+
+    if not os.path.exists(URL):
         remove_folders()
-        os.makedirs(DOWNLOAD_FOLDER)
+        os.makedirs(URL)
         
-    l = [x for x in os.listdir(DOWNLOAD_FOLDER) if fund_name in x]
+    l = [x for x in os.listdir(URL) if fund_name in x]
     
     if len(l) > 0:
         return True
@@ -48,9 +53,13 @@ def check_if_downloaded(fund_name):
     
 
 # Load and return as a dataframe
-def load_fund_df(fund_name):        
-    l = [x for x in os.listdir(DOWNLOAD_FOLDER) if fund_name in x]
-    df = pd.read_excel(DOWNLOAD_FOLDER + '/' + l[0], skiprows = 8, error_bad_lines=False)
+def load_fund_df(fund_name, testing):
+    URL = DOWNLOAD_FOLDER        
+    if testing:
+        URL = TEST_FOLDER
+        
+    l = [x for x in os.listdir(URL) if fund_name in x]
+    df = pd.read_excel(URL + '/' + l[0], skiprows = 8, error_bad_lines=False)
     return df
 
 
@@ -64,19 +73,19 @@ def get_fund_list():
 
 
 # Download or retrieve data and display
-def fund_download(new_fund):
+def fund_download(new_fund, testing=False):
     if type(new_fund) == list:
         new_fund = new_fund[0]
 
     funds_list = get_fund_list()
     link = funds_list[new_fund]
 
-    if not check_if_downloaded(new_fund):
+    if not check_if_downloaded(new_fund, testing):
         print('Downloading...')
         scrap_fund(new_fund, link)
 
     print('Plotting dataframe...')
-    df = load_fund_df(new_fund)
+    df = load_fund_df(new_fund, testing)
     df = df.drop(df.iloc[:, 2:], axis=1)
     df = convert_currency(df)
 
