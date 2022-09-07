@@ -90,6 +90,7 @@ content = html.Div(
 		html.H2('Index Funds', style=TEXT_STYLE),
 		html.Hr(),
 		dcc.Graph(id='graph_timeseries', style=GRAPH_STYLE),
+		html.Div(id='table', style={'margin':'0 5vw'}),
 		dcc.Graph(id='graph_time_multi', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_bars', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_corr', style=GRAPH_STYLE),
@@ -204,7 +205,8 @@ def update_dropdown(n_clicks):
 	[Output('graph_timeseries', 'figure'),
 	Output('graph_time_multi', 'figure'),
 	Output('graph_bars', 'figure'),
-	Output('graph_corr', 'figure')],
+	Output('graph_corr', 'figure'),
+	Output('table', 'children')],
 	[Input('submit_button', 'n_clicks'),
 	Input('dropdown', 'value')])
 def update_graphs(n_click, dropdown_value):
@@ -215,8 +217,68 @@ def update_graphs(n_click, dropdown_value):
 	f2 = update_area_graph_timeseries(dropdown_value)
 	f3 = update_bar_graph_timeseries(dropdown_value)
 	f4 = update_corr_graph(dropdown_value)
+	f5 = generate_table(dropdown_value)
 
-	return f1, f2, f3, f4
+	return f1, f2, f3, f4, f5
+
+def generate_table(dropdown_value):
+	data = pd.DataFrame(columns=['Date'])
+	
+	for val in dropdown_value:
+		if val not in PLOTTED_DF.keys():
+			df = fund_download(val, TEST_MODE)
+			df.columns = ['Date', val]
+			PLOTTED_DF[val] = df
+		else:
+			df = PLOTTED_DF[val]
+		data = pd.merge(data, df, how='outer', on='Date')
+
+	dd = pd.DataFrame(columns=['Current price', 
+				'Profit (compared to yesterday)', 
+				'Profit (compared to last month)',
+				'Profit (compared to last 6 months)',
+				'Profit (compared to last year)',
+				'Profit (compared to last 5 years)',
+				'Profit (compared to last 10 years)'],
+			index=data.columns[1:])
+
+	for fund in data.columns[1:]:
+		try:
+			p_today = data[fund].iloc[0]
+			dd.loc[fund, 'Current price'] = p_today
+
+			p_yesterday = data[fund].iloc[1]
+			dd.loc[fund, 'Profit (compared to yesterday)'] = round(100*(p_today-p_yesterday)/p_yesterday, 2)
+
+			p_month = data[fund].iloc[5*4]
+			dd.loc[fund, 'Profit (compared to last month)'] = round(100*(p_today - p_month)/p_month, 2)
+
+			p_6m = data[fund].iloc[5*4*6]
+			dd.loc[fund, 'Profit (compared to last 6 months)'] = round(100*(p_today - p_6m)/p_6m, 2)
+
+			p_year = data[fund].iloc[5*4*12]
+			dd.loc[fund, 'Profit (compared to last year)'] = round(100*(p_today - p_year)/p_year, 2)
+
+			p_5y =  data[fund].iloc[5*4*12*5]
+			dd.loc[fund, 'Profit (compared to last 5 years)'] = round(100*(p_today - p_5y)/p_5y, 2)
+
+			p_10y =  data[fund].iloc[5*4*12*10]
+			dd.loc[fund, 'Profit (compared to last 10 years)'] = round(100*(p_today - p_10y)/p_10y, 2)
+		except Exception as e:
+			print(e)
+
+	dd = dd.reset_index()
+
+	return html.Table([
+		html.Thead(
+			html.Tr([html.Th(val) for val in dd.columns])
+		),
+		html.Tbody([
+			html.Tr([
+				html.Td(dd.iloc[i][col]) for col in dd.columns
+			]) for i in range(len(dd))
+		])
+	])
 
 def update_bar_graph_timeseries(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])

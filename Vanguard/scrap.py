@@ -40,7 +40,7 @@ def check_if_downloaded(fund_name, testing):
     if testing:
         URL = TEST_FOLDER
 
-    if not os.path.exists(URL):
+    if not os.path.exists(URL) and not testing:
         remove_folders()
         os.makedirs(URL)
         
