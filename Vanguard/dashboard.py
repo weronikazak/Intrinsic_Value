@@ -163,6 +163,9 @@ def update_line_graph_timeseries(dropdown_value):
 
 def update_area_graph_timeseries(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
+	cols = {'high': 'green',
+			'medium': 'blue',
+			'low': 'red'}
 
 	for val in dropdown_value:
 		if val not in PLOTTED_DF.keys():
@@ -175,7 +178,7 @@ def update_area_graph_timeseries(dropdown_value):
 
 	data.columns.name = 'funds'
 	data = data.set_index('Date')
-	fig = px.area(data, facet_col='funds', facet_col_wrap=2, 
+	fig = px.line(data, facet_col='funds', facet_col_wrap=2, 
 				height=int((len(data.columns)-1)/2)*500)
 
 	fig.update_yaxes(showticklabels=True)
