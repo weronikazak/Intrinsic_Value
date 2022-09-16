@@ -16,6 +16,7 @@ import os
 import shutil
 
 import pandas as pd
+import numpy as np
 
 from currency_converter import CurrencyConverter
 
@@ -25,6 +26,26 @@ DOWNLOAD_FOLDER = f'./files/{today}/'
 TEST_FOLDER = './files/test/'
 CHROMEDRIVER_URL = "c:\\chromedriver.exe"
 WINDOW_SIZE = "1920,1080"
+
+
+# Calculate RSI
+def calculate_rsi(data, period=13):
+    d = pd.DataFrame()
+    d['Date'] = data['Date']
+
+    for col in data.columns[1:]:
+        c = data[col]
+        c = c.replace({0:np.nan})
+        c = c.dropna().reset_index(drop=True)
+
+        net_change = c.diff()
+        increase = net_change.clip(lower=0)
+        decrease = -1*net_change.clip(upper=0)
+        ema_up = increase.ewm(com=period, adjust=False).mean()
+        ema_down = decrease.ewm(com=period, adjust=False).mean()
+        RS = ema_up/ema_down
+        d[f'RSI_{col}'] = 100 - (100/(1+RS)) 
+    return d
 
 
 # Remove all obsolete folders

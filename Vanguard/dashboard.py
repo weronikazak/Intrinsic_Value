@@ -12,7 +12,7 @@ import numpy as np
 import itertools
 
 PLOTTED_DF = {}
-TEST_MODE = True
+TEST_MODE = False
 
 # the style arguments for the sidebar.
 SIDEBAR_STYLE = {
@@ -163,9 +163,6 @@ def update_line_graph_timeseries(dropdown_value):
 
 def update_area_graph_timeseries(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
-	cols = {'high': 'green',
-			'medium': 'blue',
-			'low': 'red'}
 
 	for val in dropdown_value:
 		if val not in PLOTTED_DF.keys():
@@ -176,12 +173,17 @@ def update_area_graph_timeseries(dropdown_value):
 			df = PLOTTED_DF[val]
 		data = pd.merge(data, df, how='outer', on='Date')
 
+	data = calculate_rsi(data)
 	data.columns.name = 'funds'
 	data = data.set_index('Date')
+
 	fig = px.line(data, facet_col='funds', facet_col_wrap=2, 
 				height=int((len(data.columns)-1)/2)*500)
+				
+	fig.add_hline(y=20, line_dash="dot")
+	fig.add_hline(y=60, line_dash="dot")
 
-	fig.update_yaxes(showticklabels=True)
+	fig.update_yaxes(showticklabels=True, matches=None)
 	fig.update_xaxes(ticklabelstep=12, dtick="M1", 
 					tickformat="%Y",
 					matches=None, showticklabels=True)
