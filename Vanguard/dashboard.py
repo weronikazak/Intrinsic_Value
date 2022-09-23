@@ -183,10 +183,12 @@ def update_area_graph_timeseries(dropdown_value):
 	fig.add_hline(y=20, line_dash="dot")
 	fig.add_hline(y=60, line_dash="dot")
 
-	fig.update_yaxes(showticklabels=True, matches=None)
-	fig.update_xaxes(ticklabelstep=12, dtick="M1", 
-					tickformat="%Y",
-					matches=None, showticklabels=True)
+	# fig.update_yaxes(showticklabels=True, matches=None)
+	fig.for_each_xaxis(lambda t: t.update(fixedrange=True))
+	fig.for_each_yaxis(lambda t: t.update(fixedrange=True))
+	# fig.update_xaxes(ticklabelstep=12, dtick="M1", 
+	# 				tickformat="%Y",
+	# 				matches=None, showticklabels=True)
 	
 	fig.update_layout(showlegend=False)
 
@@ -314,7 +316,7 @@ def update_bar_graph_timeseries(dropdown_value):
 	num_rows = int(len(df_bars.columns)/2)
 
 	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2,
-				color='color', text_auto=True, height=num_rows*500)
+				color='color', text_auto=True, height=num_rows*500, facet_col_spacing = 0.075)
 	
 	rows = list(reversed(range(1, num_rows+1)))
 	row_col = list(itertools.product(rows, [1, 2]))
@@ -365,7 +367,6 @@ def update_corr_graph(dropdown_value):
 			df_bars.loc[j, col] = profit
 	df_bars = df_bars.iloc[:-1]
 	num_rows = len(df_bars.columns)
-	print(num_rows)
 	fig = px.imshow(df_bars.iloc[:, 1:].corr(), text_auto=True, aspect="auto",
 					height=num_rows*80)
 	fig.update_xaxes(side="top")
