@@ -93,6 +93,7 @@ content = html.Div(
 		html.Div(id='table', style={'margin':'0 5vw'}),
 		dcc.Graph(id='graph_time_multi', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_bars', style=GRAPH_STYLE),
+		dcc.Graph(id='graph_bars_month', style=GRAPH_STYLE),
 		dcc.Graph(id='graph_corr', style=GRAPH_STYLE),
 	],
 	style=CONTENT_STYLE
@@ -213,7 +214,8 @@ def update_dropdown(n_clicks):
 	Output('graph_time_multi', 'figure'),
 	Output('graph_bars', 'figure'),
 	Output('graph_corr', 'figure'),
-	Output('table', 'children')],
+	Output('table', 'children'),
+	Output('graph_bars_month', 'figure')],
 	[Input('submit_button', 'n_clicks'),
 	Input('dropdown', 'value')])
 def update_graphs(n_click, dropdown_value):
@@ -225,8 +227,10 @@ def update_graphs(n_click, dropdown_value):
 	f3 = update_bar_graph_timeseries(dropdown_value)
 	f4 = update_corr_graph(dropdown_value)
 	f5 = generate_table(dropdown_value)
+	f6 = update_bar_graph_months(dropdown_value)
 
-	return f1, f2, f3, f4, f5
+
+	return f1, f2, f3, f4, f5, f6
 
 def generate_table(dropdown_value):
 	data = pd.DataFrame(columns=['Date'])
@@ -307,6 +311,7 @@ def update_bar_graph_timeseries(dropdown_value):
 		for col in df_bars.columns[1:]:
 			profit = round(100*(row_f[col] - row_p[col])/ row_p[col], 2)
 			df_bars.loc[j, col] = profit
+
 	df_bars = df_bars.iloc[:-1]
 	df_bars_m = df_bars.melt(id_vars=['Date']).dropna()
 	
@@ -316,6 +321,70 @@ def update_bar_graph_timeseries(dropdown_value):
 	num_rows = int(len(df_bars.columns)/2)
 
 	fig = px.bar(df_bars_m, x="Date", y="value", facet_col="variable", facet_col_wrap=2,
+				color='color', text_auto=True, height=num_rows*500, facet_col_spacing = 0.075)
+	
+	rows = list(reversed(range(1, num_rows+1)))
+	row_col = list(itertools.product(rows, [1, 2]))
+
+	for ticker, idx in zip(df_bars.columns[1:], row_col):
+		means = df_bars[ticker].mean()
+
+		fig.add_hline(y=means, line_dash="dot",
+						annotation_text=f"Mean: {round(means, 2)}", 
+						annotation_position="top left",
+						annotation_font_size=12,
+						annotation_font_color="black",
+						row=idx[0], col=idx[1])
+
+	fig.update_yaxes(
+					# matches=None, 
+					showticklabels=True)
+	fig.update_xaxes(ticklabelstep=1, dtick="M1", 
+					tickformat="%b\n%Y",
+					matches=None, showticklabels=True)
+	
+	fig.update_traces(textfont_size=12, 
+						textangle=0, 
+						textposition="outside", 
+						cliponaxis=False)
+	
+	return fig
+
+
+def update_bar_graph_months(dropdown_value):
+	data = pd.DataFrame(columns=['Date'])
+	for val in dropdown_value:
+		if val not in PLOTTED_DF.keys():
+			df = fund_download(val, TEST_MODE)
+			df.columns = ['Date', val]
+			PLOTTED_DF[val] = df
+		else:
+			df = PLOTTED_DF[val]
+
+		data = pd.merge(data, df, how='outer', on='Date')
+
+	current_year = datetime.now().year
+	data['year-month'] = data.Date.dt.strftime('%Y-%m')
+	data = data[((data.Date.dt.year == current_year) | (data['year-month'] == f'{current_year-1}-12'))].groupby('year-month').mean()
+
+	df_bars = pd.DataFrame()
+	for prev, nxt in zip(data.iterrows(), data.iloc[1:, :].iterrows()):
+		i, row_prev = prev
+		j, row_next = nxt
+		
+		increase = round(100*(row_prev - row_next)/row_prev, 2)
+		increase.name = j
+		df_bars = df_bars.append(increase)
+
+	df_bars = df_bars.reset_index()
+	df_bars_m = df_bars.melt(id_vars=['index']).dropna()
+	
+	df_bars_m['color'] = 'blue'
+	df_bars_m.loc[df_bars_m['value'] < 0, 'color'] = 'red'
+
+	num_rows = int(len(df_bars.columns)/2)
+
+	fig = px.bar(df_bars_m, x="index", y="value", facet_col="variable", facet_col_wrap=2,
 				color='color', text_auto=True, height=num_rows*500, facet_col_spacing = 0.075)
 	
 	rows = list(reversed(range(1, num_rows+1)))
