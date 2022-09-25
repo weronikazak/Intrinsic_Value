@@ -280,15 +280,34 @@ def generate_table(dropdown_value):
 
 	dd = dd.reset_index()
 
+	RED = {'color': 'red'}
+	GREEN = {'color': 'green'}
+	BOLD = {'fontWeight': 'bold'}
+	CURRENT_PRICE = {'background': '#eeeee4'}
+	
+	cols = []
+
+	for i in range(len(dd)):
+		trs = []
+		for col in dd.columns:
+			val = dd.iloc[i][col]
+			try:
+				if col == 'Current price':
+					trs.append(html.Td(val, style=CURRENT_PRICE))
+				elif float(val) < 0:
+					trs.append(html.Td(str(val)+'%', style=RED))
+				else:
+					val = str(val) +'%' if val > 0 else '-'
+					trs.append(html.Td(str(val), style=GREEN))
+			except:
+				trs.append(html.Td(val, style=BOLD))
+		cols.append(html.Tr(trs))
+
 	return html.Table([
 		html.Thead(
 			html.Tr([html.Th(val) for val in dd.columns])
 		),
-		html.Tbody([
-			html.Tr([
-				html.Td(dd.iloc[i][col]) for col in dd.columns
-			]) for i in range(len(dd))
-		])
+		html.Tbody(cols)
 	])
 
 def update_bar_graph_timeseries(dropdown_value):
