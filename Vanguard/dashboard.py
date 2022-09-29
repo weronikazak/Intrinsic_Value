@@ -11,6 +11,8 @@ from scrap import *
 import numpy as np
 import itertools
 
+import logging
+
 PLOTTED_DF = {}
 TEST_MODE = False
 
@@ -463,4 +465,5 @@ def update_corr_graph(dropdown_value):
 
 
 if __name__ == '__main__':
+	logging.getLogger('werkzeug').setLevel(logging.ERROR)
 	app.run_server(port='8085')
