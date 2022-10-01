@@ -110,12 +110,13 @@ def update_line_graph_timeseries(dropdown_value):
 	fig = 0
 
 	if len(list(dropdown_value)) == 1:
+		val = dropdown_value[0]
 		if val not in PLOTTED_DF.keys():
-			df = fund_download(dropdown_value, TEST_MODE)
+			df = fund_download(val, TEST_MODE)
 			df.columns = ['Date', val]
 			PLOTTED_DF[val] = df
 		else:
-			df = PLOTTED_DF[dropdown_value]
+			df = PLOTTED_DF[val]
 
 		x = df[df.columns[0]].values
 		y = df[df.columns[1]].values
