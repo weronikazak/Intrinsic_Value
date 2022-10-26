@@ -117,7 +117,7 @@ def fund_download(new_fund, testing=False):
 def scrap_fund(fund_name, link):
     CHROMEDRIVER_URL = "c:\chromedriver.exe"
     WINDOW_SIZE = "1920,1080"
-    DOWNLOAD_URL = f'C:\\Users\\Weronika\\Desktop\\Intrinsic_Value\\Vanguard\\files\\{today}\\'
+    DOWNLOAD_URL = f'{os.getcwd()}\\files\\{today}\\'
 
     while True:
         chrome_options = Options()
