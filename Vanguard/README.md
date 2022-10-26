@@ -1,6 +1,47 @@
 ## Vanguard Stock Analysis
 
-Analysis of Index Funds. Choose between:
+Analysis of Index Funds.
+
+### Analyse graphs
+
+- All time, 10 years, 5 years, 1 year, 1 month performance
+- Table (for better comparison between current and past performance)
+- RSI
+- Yearly average
+- Monthly average
+- Correlation between funds
+
+<p align="center">
+  <img src="https://github.com/weronikazak/Intrinsic_Value/blob/main/Vanguard/examples/example1.gif" alt="Example 1">
+</p>
+
+### Updates in real-time
+
+Add or delete the funds to see them plotted on the same graph.
+
+<p align="center">
+  <img src="https://github.com/weronikazak/Intrinsic_Value/blob/main/Vanguard/examples/example2.gif" alt="Example 2">
+</p>
+
+### Choose between all Vanguard index funds
+
+Best performing passive Vanguard funds.
+
+<p align="center">
+  <img src="https://github.com/weronikazak/Intrinsic_Value/blob/main/Vanguard/examples/example3.gif" alt="Example 3">
+</p>
+
+### Choose your timeframe
+
+Choose between all time, 10 years, 5 years, 1 year or 1 month.
+
+<p align="center">
+  <img src="https://github.com/weronikazak/Intrinsic_Value/blob/main/Vanguard/examples/example4.gif" alt="Example 4">
+</p>
+
+## Funds list
+
+ Choose between:
 
 
 <table>
@@ -216,19 +257,3 @@ Analysis of Index Funds. Choose between:
   </tr>
         
 </table>
-
-<p align="center">
-  <img src="Vanguard/examples/example1.gif" alt="Logo">
-</p>
-
-<p align="center">
-  <img src="Vanguard/examples/example2.gif" alt="Logo">
-</p>
-
-<p align="center">
-  <img src="Vanguard/examples/example3.gif" alt="Logo">
-</p>
-
-<p align="center">
-  <img src="Vanguard/examples/example4.gif" alt="Logo">
-</p>
