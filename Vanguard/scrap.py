@@ -6,6 +6,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import chromedriver_autoinstaller
+
 import selenium.webdriver.support.ui as ui
 import time
 
@@ -17,19 +19,33 @@ import shutil
 
 import pandas as pd
 import numpy as np
+import shutil
 
 from currency_converter import CurrencyConverter
 
 today = str(datetime.now().date())
 
+
 DOWNLOAD_FOLDER = f'./files/{today}/'
 TEST_FOLDER = './files/test/'
-CHROMEDRIVER_URL = "c:\\chromedriver.exe"
+
+DISK = 'R'
+
+CHROME_VERSION = (chromedriver_autoinstaller.get_chrome_version()).split('.')[0]
+CHROMEDRIVER_DIR = f"{DISK}:/{CHROME_VERSION}"
+CHROMEDRIVER_URL = f"{DISK}:/chromedriver.exe"
+
 WINDOW_SIZE = "1920,1080"
 
+# Checek whether Chrome up to date
+def download_chrome_driver():
+    chromedriver_autoinstaller.install(path=DISK + ':/')
+    if os.path.exists(CHROMEDRIVER_DIR):
+        os.replace(CHROMEDRIVER_DIR + '/chromedriver.exe', CHROMEDRIVER_URL)
+        os.rmdir(CHROMEDRIVER_DIR)
 
 # Calculate RSI
-def calculate_rsi(data, period=13):
+def calculate_rsi(data, period=10):
     d = pd.DataFrame()
     d['Date'] = data['Date']
 
@@ -57,6 +73,8 @@ def remove_folders():
 
 # Check if data has been downloaded
 def check_if_downloaded(fund_name, testing):
+    download_chrome_driver()
+
     URL = DOWNLOAD_FOLDER
     if testing:
         URL = TEST_FOLDER
@@ -115,9 +133,9 @@ def fund_download(new_fund, testing=False):
 
 # Scrap and download fund
 def scrap_fund(fund_name, link):
-    CHROMEDRIVER_URL = "c:\chromedriver.exe"
     WINDOW_SIZE = "1920,1080"
     DOWNLOAD_URL = f'{os.getcwd()}\\files\\{today}\\'
+
 
     while True:
         chrome_options = Options()
