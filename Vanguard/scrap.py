@@ -11,7 +11,6 @@ import chromedriver_autoinstaller
 import selenium.webdriver.support.ui as ui
 import time
 
-import ipywidgets as widgets
 from IPython.display import display, clear_output
 from datetime import datetime
 import os
@@ -25,23 +24,25 @@ from currency_converter import CurrencyConverter
 
 today = str(datetime.now().date())
 
+SAVE_TO=os.getcwd() + '\\files\\'
+DOWNLOAD_FOLDER = SAVE_TO + today + '\\' 
+TEST_FOLDER = SAVE_TO + 'test\\' 
 
-DOWNLOAD_FOLDER = f'./files/{today}/'
-TEST_FOLDER = './files/test/'
+FUNDS_LIST = os.getcwd() + '\\funds.txt'
 
-DISK = 'R'
+DISK = 'C'
 
 CHROME_VERSION = (chromedriver_autoinstaller.get_chrome_version()).split('.')[0]
-CHROMEDRIVER_DIR = f"{DISK}:/{CHROME_VERSION}"
-CHROMEDRIVER_URL = f"{DISK}:/chromedriver.exe"
+CHROMEDRIVER_DIR = f"{DISK}:\{CHROME_VERSION}"
+CHROMEDRIVER_URL = f"{DISK}:\chromedriver.exe"
 
 WINDOW_SIZE = "1920,1080"
 
-# Checek whether Chrome up to date
+# Check whether Chrome up to date
 def download_chrome_driver():
-    chromedriver_autoinstaller.install(path=DISK + ':/')
-    if os.path.exists(CHROMEDRIVER_DIR):
-        os.replace(CHROMEDRIVER_DIR + '/chromedriver.exe', CHROMEDRIVER_URL)
+    chromedriver_autoinstaller.install(path=DISK + ':\\')
+    if CHROME_VERSION is not "" and os.path.exists(CHROMEDRIVER_DIR):
+        os.replace(CHROMEDRIVER_DIR + '\chromedriver.exe', CHROMEDRIVER_URL)
         os.rmdir(CHROMEDRIVER_DIR)
 
 # Calculate RSI
@@ -66,9 +67,12 @@ def calculate_rsi(data, period=10):
 
 # Remove all obsolete folders
 def remove_folders():
-    for folder in os.listdir('./files'):
+    if not os.path.exists(SAVE_TO):
+        os.makedirs(SAVE_TO)
+    
+    for folder in os.listdir(SAVE_TO):
         if today not in folder:
-            shutil.rmtree('./files/' + folder)
+            shutil.rmtree(SAVE_TO + folder)
 
 
 # Check if data has been downloaded
@@ -98,13 +102,13 @@ def load_fund_df(fund_name, testing):
         URL = TEST_FOLDER
         
     l = [x for x in os.listdir(URL) if fund_name in x]
-    df = pd.read_excel(URL + '/' + l[0], skiprows = 8, error_bad_lines=False)
+    df = pd.read_excel(URL + '\\' + l[0], skiprows = 8, error_bad_lines=False)
     return df
 
 
 def get_fund_list():
     funds_list = {}
-    with open('./funds.txt', 'r') as file:
+    with open(FUNDS_LIST, 'r') as file:
         for line in file:
             name, link = line.split('#')
             funds_list[name] = link
@@ -141,6 +145,7 @@ def scrap_fund(fund_name, link):
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+        chrome_options.binary_location = 
         chrome_options.add_experimental_option("prefs", {
             "download.default_directory": DOWNLOAD_URL,
             "download.prompt_for_download": False,
