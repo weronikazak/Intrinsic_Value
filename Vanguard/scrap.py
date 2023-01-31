@@ -97,12 +97,13 @@ def check_if_downloaded(fund_name, testing):
 
 # Load and return as a dataframe
 def load_fund_df(fund_name, testing):
-    URL = DOWNLOAD_FOLDER        
+    URL = DOWNLOAD_FOLDER   
     if testing:
         URL = TEST_FOLDER
         
     l = [x for x in os.listdir(URL) if fund_name in x]
-    df = pd.read_excel(URL + '\\' + l[0], skiprows = 8, error_bad_lines=False)
+    print(URL + l[0])
+    df = pd.read_excel(URL + l[0], skiprows = 8)
     return df
 
 
@@ -138,20 +139,21 @@ def fund_download(new_fund, testing=False):
 # Scrap and download fund
 def scrap_fund(fund_name, link):
     WINDOW_SIZE = "1920,1080"
-    DOWNLOAD_URL = f'{os.getcwd()}\\files\\{today}\\'
-
 
     while True:
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-        chrome_options.binary_location = 
+        # chrome_options.binary_location = 
         chrome_options.add_experimental_option("prefs", {
-            "download.default_directory": DOWNLOAD_URL,
+            "download.default_directory": DOWNLOAD_FOLDER,
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
             "safebrowsing_for_trusted_sources_enabled": False,
-            "safebrowsing.enabled": False
+            "safebrowsing.enabled": False,
+            "excludeSwitches": ["enable-automation"],
+            'useAutomationExtension': False,
+            'Access-Control-Allow-Origin': '*'
         })
 
         driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
@@ -161,13 +163,23 @@ def scrap_fund(fund_name, link):
 
         try:
             driver.find_element(By.ID, "onetrust-reject-all-handler").click()
-            wait.until(lambda driver: driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]"))
-            driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]").click()
+            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), ' I agree')]"))
+            driver.find_element(By.XPATH, "//button[contains(text(), ' I agree')]").click()
             driver.implicitly_wait(10)
         except Exception as e:
             print("No cookies popup detected")
             print ('-------- RETRY --------')
             continue
+
+        try:
+            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), ' I agree')]"))
+            driver.find_element(By.XPATH, "//span[contains(text(), ' I agree')]").click()
+            driver.implicitly_wait(10)
+        except Exception as e:
+            print("No agreement popup detected")
+            print ('-------- RETRY --------')
+            # continues
+
 
         try:
             wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), 'Download') and contains(text(), 'prices')]"))
