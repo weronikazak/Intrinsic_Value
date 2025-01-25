@@ -207,7 +207,6 @@ def update_dropdown(n_clicks):
 		'U.S. Equity Index Fund',
 		'FTSE Developed World ex-U.K. Equity Index Fund',
 		'FTSE All-World UCITS ETF',
-		'Global Bond Index Fund'
 	]
 
 	return my_funds 

@@ -21,6 +21,10 @@ import numpy as np
 import shutil
 
 from currency_converter import CurrencyConverter
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 today = str(datetime.now().date())
 
@@ -32,18 +36,18 @@ FUNDS_LIST = os.getcwd() + '\\funds.txt'
 
 DISK = 'C'
 
-CHROME_VERSION = (chromedriver_autoinstaller.get_chrome_version()).split('.')[0]
-CHROMEDRIVER_DIR = f"{DISK}:\{CHROME_VERSION}"
+# CHROME_VERSION = (chromedriver_autoinstaller.get_chrome_version()).split('.')[0]
+# CHROMEDRIVER_DIR = f"{DISK}:"
 CHROMEDRIVER_URL = f"{DISK}:\chromedriver.exe"
 
 WINDOW_SIZE = "1920,1080"
 
 # Check whether Chrome up to date
-def download_chrome_driver():
-    chromedriver_autoinstaller.install(path=DISK + ':\\')
-    if CHROME_VERSION is not "" and os.path.exists(CHROMEDRIVER_DIR):
-        os.replace(CHROMEDRIVER_DIR + '\chromedriver.exe', CHROMEDRIVER_URL)
-        os.rmdir(CHROMEDRIVER_DIR)
+# def download_chrome_driver():
+#     chromedriver_autoinstaller.install(path=DISK + ':\\')
+#     if CHROME_VERSION is not "" and os.path.exists(CHROMEDRIVER_DIR):
+#         os.replace(CHROMEDRIVER_DIR + '\chromedriver.exe', CHROMEDRIVER_URL)
+#         os.rmdir(CHROMEDRIVER_DIR)
 
 # Calculate RSI
 def calculate_rsi(data, period=10):
@@ -77,7 +81,8 @@ def remove_folders():
 
 # Check if data has been downloaded
 def check_if_downloaded(fund_name, testing):
-    download_chrome_driver()
+    # download_chrome_driver()
+
 
     URL = DOWNLOAD_FOLDER
     if testing:
@@ -156,15 +161,17 @@ def scrap_fund(fund_name, link):
             'Access-Control-Allow-Origin': '*'
         })
 
-        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_URL, options=chrome_options)
+        # driver = webdriver.Chrome( options=chrome_options)
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+
         driver.implicitly_wait(15)
         driver.get(link)
         wait = ui.WebDriverWait(driver,15)
 
         try:
             driver.find_element(By.ID, "onetrust-reject-all-handler").click()
-            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), ' I agree')]"))
-            driver.find_element(By.XPATH, "//button[contains(text(), ' I agree')]").click()
+            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), 'I agree')]"))
+            driver.find_element(By.XPATH, "//button[contains(text(), 'I agree')]").click()
             driver.implicitly_wait(10)
         except Exception as e:
             print("No cookies popup detected")
@@ -172,8 +179,8 @@ def scrap_fund(fund_name, link):
             continue
 
         try:
-            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), ' I agree')]"))
-            driver.find_element(By.XPATH, "//span[contains(text(), ' I agree')]").click()
+            wait.until(lambda driver: driver.find_element(By.XPATH, "//span[contains(text(), 'I agree')]"))
+            driver.find_element(By.XPATH, "//span[contains(text(), 'I agree')]").click()
             driver.implicitly_wait(10)
         except Exception as e:
             print("No agreement popup detected")
